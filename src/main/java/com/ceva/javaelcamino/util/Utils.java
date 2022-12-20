@@ -9,8 +9,8 @@ package com.ceva.javaelcamino.util;
  * @author PC
  */
 public class Utils {
-    private static boolean isDigit(char ch){
-        return (ch > '0') && (ch <= '9');
+    public static boolean isDigit(char ch){
+        return (ch >= '0') && (ch <= '9');
     }
     
     public static boolean isNumber(String str){
