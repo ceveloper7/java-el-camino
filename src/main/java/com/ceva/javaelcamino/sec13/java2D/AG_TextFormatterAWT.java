@@ -130,6 +130,43 @@ public class AG_TextFormatterAWT extends JPanel {
             xPos += spaceWidth + width;
         }   
     }
+    /**
+     * 
+     * @param g2d
+     * @param curLine
+     * @param xPos
+     * @param yPos
+     * @param lineWidth ancho de la columna
+     * @param curLineWidth tamanio que ocupan todas las palabra acumuladas
+     */
+    private void drawJustified(Graphics2D g2d, FontMetrics fm, List<String> curLine, int xPos, int yPos, int lineWidth, int curLineWidth){
+        // validamos si es menos de una palabra, pues no hacemos nada
+        if(curLine.size() <= 1){
+            // cuando es una sola palabra, la dibujamos en la coordenada solicitada
+            if(curLine.size() == 1 ){
+                g2d.drawString(curLine.get(0), xPos, yPos);
+            }
+            return;
+        }
+        // calculamos cuantos espacios hay entre todas la palabra de esta linea
+        // si la linea tiene 3 palabra, entonces, hay dos espacios
+        int sp = curLine.size() - 1;
+        // space1 = ancho de columna - el tamanio de todas la palabras acumuladas / sp
+        // de acuerdo al nro de espacio que necesita la linea space1 representa el tamanio que debe tener cada space
+        int space1 = (lineWidth - curLineWidth) / sp;
+        // obtenemos elsobrante de espacio
+        int mod = (lineWidth- curLineWidth) % sp;
+        int space2 = (mod + (sp-1)) / sp;
+        
+        for(String s : curLine){
+            int insCount = (mod > space2) ? space2 : mod;
+            mod -= insCount;
+            insCount += space1;
+            g2d.drawString(s, xPos, yPos);
+            xPos += insCount + fm.stringWidth(s);
+        }
+        
+    }
     
     private void drawTextJustified(Graphics2D g2d){
         FontMetrics fm = g2d.getFontMetrics();
@@ -150,6 +187,42 @@ public class AG_TextFormatterAWT extends JPanel {
         int accWidth = 0;
         // controlamos el ancho que ocupan las palabras sin tomar en cuenta los espacios
         int curLineWidth = 0;
+        
+        for(String word : words){
+            // obtenemos ancho de la palabra
+            int width = fm.stringWidth(word);
+            // validamos si se ha superado el tamanio estimado para la columna
+            if((accWidth + spaceWidth + width) > lineWidth){
+                // pasamos a la sgte linea y dibujamos una linea justificada
+                drawJustified(g2d, fm, curLine, xPos, yPos, lineWidth, curLineWidth);
+                // reseteamos curLine que es el acumulado de palabras
+                curLine.clear();
+                curLineWidth = 0;
+                accWidth = 0;
+                
+                // dibujar la en sgte linea\
+                yPos += fm.getHeight();
+                // validamos si nos pasamos del final de la ventana, si es asi pasamos a la sgte columna
+                if((yPos + fm.getDescent()) >= getHeight()){
+                    // si nos pasamos, cambiamos a la sgte columna
+                    // reset del yPos
+                    yPos = fm.getAscent();
+                    // incrementamos la columna
+                    curColumn++;
+                    if(curColumn >= numColumns){
+                        break;
+                    }
+                }
+                // si no necesitamos pasar a la sgte columna. calculamos el inicio de linea para escribir
+                xPos = margin + (lineWidth + margin)*curColumn;
+            }
+            
+            // add la palabra a la coleccion de palabras
+            curLine.add(word);
+            curLineWidth += width;
+            // acumulado
+            accWidth += spaceWidth + width;
+        }
     }
 
     @Override
