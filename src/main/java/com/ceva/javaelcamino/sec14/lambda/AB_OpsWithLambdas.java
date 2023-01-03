@@ -30,5 +30,18 @@ public class AB_OpsWithLambdas {
         });
         // filtramos numeros impares
         filterData(data, n -> (n % 2) == 1);
+        
+        // definimos un bloque
+        filterData(data, (n)->{
+            if(n == 1){
+                return false;
+            }
+            for(int i = 2; i < (n-1); i++){
+                if((n%i)==0){
+                    return false;
+                }
+            }
+            return true;
+        });
     }
 }
