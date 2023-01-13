@@ -14,6 +14,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Stroke;
 import java.awt.geom.Rectangle2D;
+import java.util.Calendar;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -22,10 +23,14 @@ import javax.swing.SwingUtilities;
  *
  * @author PC
  */
-public class Watch3 extends JPanel {
+public class Watch4 extends JPanel {
     private Font fSmall;
     private Font fMedium;
     private Font fLarge;
+    
+    private int hour;
+    private int minute;
+    private int second;
     
     private Font getSmallFont(Graphics2D g2d){
         if(fSmall != null){
@@ -51,6 +56,16 @@ public class Watch3 extends JPanel {
         return fLarge;
     }
     
+    // metodo para saber/obtener la hora
+    private void updateTime(){
+        // obtenemos instancia de Calendar
+        Calendar cal = Calendar.getInstance();
+        // retornamos hora minto segundo
+        hour = cal.get(Calendar.HOUR);
+        minute = cal.get(Calendar.MINUTE);
+        second = cal.get(Calendar.SECOND);
+    }
+    
     // Tamanio de letra (chico, mediano , grande)
     @Override
     protected void paintComponent(Graphics g) {
@@ -73,7 +88,8 @@ public class Watch3 extends JPanel {
          * -> with size -> height frame -> frame que describe al circulo
          */
         Rectangle frame = new Rectangle(bounds.width / 2 - size / 2, bounds.height / 2 - size / 2, size, size);
-
+        g2d.setColor(new Color(0, 0x80, 0)); // color de linea
+        g2d.drawOval(frame.x, frame.y, frame.width, frame.height); // dibujamos el circulo en le medio
         /**
          * Dibujo de lineas para horas, minutos y segundos
          */
@@ -100,16 +116,16 @@ public class Watch3 extends JPanel {
 
         Stroke simpleStroke = g2d.getStroke();
         Stroke boldStroke = new BasicStroke(2);
-
-        g2d.setColor(new Color(0, 0x80, 0)); // color de linea
+        double angle;
         for (int n = 0; n < 60; n++) {
             // angulo que tiene cada segundo 360/60
-            double angle = (270 + n * (360 / 60)) % 360.0; // mod 360 nos permite un rango entre 0 y 360
+            angle = (270 + n * (360 / 60)) % 360.0; // mod 360 nos permite un rango entre 0 y 360
             double coseno = Math.cos(Math.toRadians(angle));// calculamos el coseno de angulo pero primero lo convertimos a radianes
             double seno = Math.sin(Math.toRadians(angle));// calculamos el seno del a angulo
             // si n es divisible por 5 significa que estoy en la marca de una division de hora
             if ((n % 5) == 0) {
                 // dibujamos la lineas de hora
+                // cuando es 1 hora, el radio es 0.9 del radius
                 innerRadius = radius * 0.9;
 
                 // dibujamos la hora
@@ -125,13 +141,14 @@ public class Watch3 extends JPanel {
                 int y = (int) (r.getHeight() / 2 - fm.getDescent() + radius * seno * 0.8);
 //                    g2d.drawRect(centerX + x, centerY - y - fm.getDescent(), (int) r.getWidth(), (int) r.getHeight());
                 g2d.drawString(String.valueOf(h), centerX + x, centerY + y);
-                // un punto en el centro
-                g2d.fillOval(centerX - 2, centerY - 2, 4, 4);
+                // un punto en el centro del reloj
+//                g2d.fillOval(centerX - 2, centerY - 2, 4, 4);
                 // fin dibujamos la hora
 
                 g2d.setStroke(boldStroke);
             } else {
                 // dibujamos la lineas de minutos
+                // cuando es 1 minuto, el radio es 0.95 del radius
                 innerRadius = radius * 0.95;
                 g2d.setStroke(simpleStroke);
             }
@@ -140,17 +157,27 @@ public class Watch3 extends JPanel {
             g2d.drawLine((int) (centerX + coseno * innerRadius), (int) (centerY + seno * innerRadius),
                     (int) (centerX + coseno * radius), (int) (centerY + seno * radius));
         }
-        // fin de lineas de reloj
-
-        g2d.drawOval(frame.x, frame.y, frame.width, frame.height); // dibujamos el circulo
-        // fin forma del reloj
+        // lineas para las manecillas
+        double hourRadius = radius * 0.5;
+        double minRadius = radius * 0.7;
+        double secRadius = radius * 0.9;
+        updateTime();
+        angle = (270 + hour * (360.0 / 12) + minute * (360.0 / 12 / 60)) % 360.0;
+        g2d.drawLine(centerX, centerY, (int)(centerX + Math.cos(Math.toRadians(angle)) * hourRadius), 
+                                       (int)(centerY + Math.sin(Math.toRadians(angle)) * hourRadius));
+        angle = (270 + minute * (360 / 60)) % 360.0;
+        g2d.drawLine(centerX, centerY, (int)(centerX + Math.cos(Math.toRadians(angle)) * minRadius), 
+                                       (int)(centerY + Math.sin(Math.toRadians(angle)) * minRadius));
+        angle = (270 + second * (360 / 60)) % 360.0;
+        g2d.drawLine(centerX, centerY, (int)(centerX + Math.cos(Math.toRadians(angle)) * secRadius), 
+                                       (int)(centerY + Math.sin(Math.toRadians(angle)) * secRadius));
     }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            Watch3 mainPanel = new Watch3();
+            Watch4 mainPanel = new Watch4();
             JFrame frame = new JFrame();
-            frame.setTitle("Watch 3");
+            frame.setTitle("Watch 4");
             frame.setMinimumSize(new Dimension(400, 400));
             frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             frame.setContentPane(mainPanel);
