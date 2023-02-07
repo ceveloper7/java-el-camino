@@ -18,6 +18,8 @@ import java.awt.Rectangle;
 import java.awt.Stroke;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.geom.Arc2D;
+import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.Calendar;
@@ -292,6 +294,12 @@ public class Watch8 extends JPanel {
     private void createDayNightImage(int width){
         dayNightImage = new BufferedImage(width, width, BufferedImage.TYPE_INT_RGB);
         Graphics2D g2d = dayNightImage.createGraphics();
+        
+        int centerX = width/2;
+        int centerY = width/2;
+        // radio de la caratula
+        float dndRadius = width/2;
+        
         // dibujamos el firmamento con un gradiente en lineas horizontales
         Paint savePaint = g2d.getPaint();
         /**
@@ -301,8 +309,48 @@ public class Watch8 extends JPanel {
         GradientPaint gp = new GradientPaint(0, width/2 - width/16, dayColor, 0, width/2 + width/16, nightColor);
         g2d.setPaint(gp); // colocamos el nuevo gradiente
         g2d.fillRect(0, 0, width, width);
-        
         g2d.setPaint(savePaint);
+        
+        // pintamos el sol
+        // definimos el radio del centro del sol que es igual al 20% del radio de la caratula
+        float sunRadius = dndRadius * 0.13f;
+        g2d.setColor(Color.ORANGE);
+        fillStars(g2d, centerX, (int)(centerY-dndRadius+sunRadius*2), (int)(sunRadius*2), (int)(sunRadius*1.2f), 12, 0);
+        g2d.setColor(Color.YELLOW);
+        g2d.fillOval((int)(centerX-sunRadius), (int)(centerY-dndRadius+sunRadius), (int)(sunRadius*2), (int)(sunRadius*2));
+        
+        // pintamos la luna
+        float moonRadius = dndRadius*0.2f;
+        Arc2D arc = new Arc2D.Float(centerX-moonRadius, centerY+dndRadius-moonRadius*3, moonRadius*2, moonRadius*2, 0, 360, Arc2D.CHORD);
+        Area moon = new Area(arc);
+        arc = new Arc2D.Float(centerX-moonRadius - moonRadius*0.7f, centerY+dndRadius-moonRadius*3, moonRadius*2, moonRadius*2,0, 360, Arc2D.CHORD);
+        moon.subtract(new Area(arc));
+        g2d.setColor(Color.WHITE);
+        g2d.fill(moon);
+        
+        // Estrellas
+        double angle;
+        g2d.setColor(Color.YELLOW);
+        // Dibujamos un circulo de 4 estrellas
+        for(int n = 0; n < 4; n++){
+            angle = (180.0 - (180.0/8) - n * (180.0/4)) % 360;
+            // el circulo es 75% de la caratula
+            float x = (float)(Math.cos(Math.toRadians(angle)) * dndRadius*0.75);
+            float y = (float)(Math.sin(Math.toRadians(angle)) * dndRadius*0.75);
+            
+            fillStars(g2d, (int)(centerX+x), (int)(centerY+y), (int)(dndRadius*0.1f), (int)(dndRadius*0.05f), 5, 
+                     (int)(270-180.0/8-n*180.0/4));
+        }
+        
+        for(int n = 0; n < 2; n++){
+            angle = (180.0 - (180.0/4) - n * (180.0/2)) % 360;
+            float x = (float)(Math.cos(Math.toRadians(angle)) * dndRadius*0.35);
+            float y = (float)(Math.sin(Math.toRadians(angle)) * dndRadius*0.35);
+            
+            fillStars(g2d, (int)(centerX+x), (int)(centerY+y), (int)(dndRadius*0.1f), (int)(dndRadius*0.05f), 5, 
+                     (int)(270-180.0/4-n*180.0/2));
+        }
+        
         g2d.dispose();
     }
     
@@ -360,26 +408,43 @@ public class Watch8 extends JPanel {
          * -> with size -> height frame -> frame que describe al circulo
          */
         Rectangle frame = new Rectangle(bounds.width / 2 - size / 2, bounds.height / 2 - size / 2, size, size);
+
         
         // probamos dibujar la estrella
         g2d.setColor(Color.BLACK);
         g2d.fillRect(0, 0, bounds.width, bounds.height);
-/*        g2d.setColor(Color.WHITE);
-        fillStars(g2d, bounds.width/2, bounds.height/2, frame.width/2, frame.height/4, 5, 30);
- */       // fin de la prueba de dibujo de estrella
+//        g2d.setColor(Color.WHITE);
+//        fillStars(g2d, bounds.width/2, bounds.height/2, frame.width/2, frame.height/4, 5, 30);
+        // fin de la prueba de dibujo de estrella
         
         // probamos dibujar el sol
         // esfera del sol
-        float sunRadius = getWidth()/6;
-        g2d.setColor(Color.ORANGE);
-        fillStars(g2d, getWidth()/2, getHeight()/2, (int)sunRadius*2, (int)(sunRadius*1.2f), 12, 0);
-        g2d.setColor(Color.YELLOW);
-        g2d.fillOval((int)(getWidth()/2 - sunRadius), (int)(getHeight()/2 - sunRadius), (int)sunRadius*2, (int)sunRadius*2);
-        if(true){
-            return;
-        } 
+//        float sunRadius = getWidth()/6;
+//        g2d.setColor(Color.ORANGE);
+//        fillStars(g2d, getWidth()/2, getHeight()/2, (int)sunRadius*2, (int)(sunRadius*1.2f), 12, 0);
+//        g2d.setColor(Color.YELLOW);
+//        g2d.fillOval((int)(getWidth()/2 - sunRadius), (int)(getHeight()/2 - sunRadius), (int)sunRadius*2, (int)sunRadius*2);
+
+        // dibujamos una luna
+//        float moonRadius = getWidth()/6;
+        // definimos una figura geometrica arco
+//        Arc2D arc = new Arc2D.Float(bounds.width/2 - moonRadius, bounds.height/2 - moonRadius, moonRadius*2, moonRadius*2, 
+//                                    0, 360, Arc2D.CHORD);
+        // definimos una area que se forma en base al arco creado
+//        Area moon = new Area(arc);
+        // definimos un nuevo arco pero le restamos el 70% del radio con la formula moonRadius*0.7f
+//        arc = new Arc2D.Float(bounds.width/2 - moonRadius - moonRadius*0.7f, bounds.width/2-moonRadius,
+//                              moonRadius*2, moonRadius*2, 0, 360, Arc2D.CHORD);
+        // al area definida de moon le restamos el area que ocupe una nueva figura geometrica
+//        moon.subtract(new Area(arc));
+//        g2d.setColor(Color.WHITE);
+//        g2d.fill(moon);
+        // fin ejemplo de la luna
+//        if(true){
+//            return;
+//        }
         
-        g2d.setColor(Color.BLACK);
+//        g2d.setColor(Color.BLACK);
         /**
          * Dibujo de lineas para horas, minutos y segundos
          */
