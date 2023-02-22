@@ -100,12 +100,161 @@ public class AWTMiscTest extends JPanel{
         g2d.setColor(Color.YELLOW);
         g2d.fill(gp);
     }
+    
+    private void test7(Graphics2D g2d){
+        int radius = 100;
+        int centerX = 150;
+        int centerY = 150;
+        float smoothLen = 0.5f;
+        
+        // 1er arco
+        Arc2D arc = new Arc2D.Float(centerX-radius, centerY-radius, radius*2, radius*2, 10, 180, Arc2D.CHORD);
+        // creamos un area a partir del arco arc
+        Area a = new Area(arc);
+        
+        // 2do arco
+        arc = new Arc2D.Float(centerX-radius*1.1f, centerY-radius*1.1f, radius*2.2f, radius*2.2f, 170, 180, Arc2D.CHORD);
+        a.subtract(new Area(arc));
+        
+        // 3er arco
+        arc = new Arc2D.Float(centerX-radius*0.2f, centerY-radius*0.2f, radius*0.4f, radius*0.4f, 0, 180, Arc2D.CHORD);
+        a.subtract(new Area(arc));
+        
+        // dibujamos una region
+        int x1 = (int)(centerX + radius * (1 - smoothLen) * Math.cos(Math.toRadians(10)));
+        int y1 = (int)(centerY - radius * (1 - smoothLen) * Math.sin(Math.toRadians(10)));
+        
+        int x2 = (int)(centerX + radius * Math.cos(Math.toRadians(10)));
+        int y2 = (int)(centerY - radius * Math.sin(Math.toRadians(10)));
+        
+        int x3 = (int)(centerX + radius * Math.cos(Math.toRadians(10) + smoothLen));
+        int y3 = (int)(centerX - radius * Math.sin(Math.toRadians(10) + smoothLen));
+        
+        g2d.setColor(Color.YELLOW);
+        g2d.fill(a);
+        
+        // Agregamos la nueva cuerva
+        GeneralPath gp = new GeneralPath();
+        // movemos al punto 1
+        gp.moveTo(x1, y1);
+        // dibujamos la curva
+        gp.quadTo(x2, y2, x3, y3);
+        gp.lineTo(x2, y2);
+        // cerramos la curva
+        gp.closePath();
+        // la pintamos con color rojo
+        g2d.setColor(Color.RED);
+        g2d.fill(gp);
+    }
+    
+    private void test8(Graphics2D g2d){
+        int radius = 100;
+        int centerX = 150;
+        int centerY = 150;
+        float smoothLen = 0.5f;
+        
+        // 1er arco
+        Arc2D arc = new Arc2D.Float(centerX-radius, centerY-radius, radius*2, radius*2, 10, 180, Arc2D.CHORD);
+        // creamos un area a partir del arco arc
+        Area a = new Area(arc);
+        
+        // 2do arco
+        arc = new Arc2D.Float(centerX-radius*1.1f, centerY-radius*1.1f, radius*2.2f, radius*2.2f, 170, 180, Arc2D.CHORD);
+        a.subtract(new Area(arc));
+        
+        // 3er arco
+        arc = new Arc2D.Float(centerX-radius*0.2f, centerY-radius*0.2f, radius*0.4f, radius*0.4f, 0, 180, Arc2D.CHORD);
+        a.subtract(new Area(arc));
+        
+        // dibujamos una region
+        int x1 = (int)(centerX + radius * (1 - smoothLen) * Math.cos(Math.toRadians(10)));
+        int y1 = (int)(centerY - radius * (1 - smoothLen) * Math.sin(Math.toRadians(10)));
+        
+        int x2 = (int)(centerX + radius * Math.cos(Math.toRadians(10)));
+        int y2 = (int)(centerY - radius * Math.sin(Math.toRadians(10)));
+        
+        int x3 = (int)(centerX + radius * Math.cos(Math.toRadians(10) + smoothLen));
+        int y3 = (int)(centerX - radius * Math.sin(Math.toRadians(10) + smoothLen));
+        
+        int x4 = (int)(centerX + radius * 1.05 * Math.cos(Math.toRadians(10) + smoothLen));
+        int y4 = (int)(centerX - radius * 1.05 * Math.sin(Math.toRadians(10) + smoothLen));
+        
+        g2d.setColor(Color.YELLOW);
+        g2d.fill(a);
+        
+        // Agregamos la nueva cuerva
+        GeneralPath gp = new GeneralPath();
+        // movemos al punto 1
+        gp.moveTo(x1, y1);
+        // dibujamos la curva
+        gp.quadTo(x2, y2, x3, y3);
+        gp.lineTo(x4, y4);
+        x2 = (int)(centerX + radius * 1.05 * Math.cos(Math.toRadians(10-1)));
+        y2 = (int)(centerY - radius * 1.05 * Math.sin(Math.toRadians(10-1)));
+        gp.lineTo(x2, y2);
+        // cerramos la curva
+        gp.closePath();
+        // la pintamos con color rojo
+        g2d.setColor(Color.RED);
+        g2d.fill(gp);
+    }
+    
+    private void test9(Graphics2D g2d){
+        int radius = 100;
+        int centerX = 150;
+        int centerY = 150;
+        float smoothLen = 0.15f;
+        
+        // 1er arco
+        Arc2D arc = new Arc2D.Float(centerX-radius, centerY-radius, radius*2, radius*2, 10, 180, Arc2D.CHORD);
+        // creamos un area a partir del arco arc
+        Area a = new Area(arc);
+        
+        // 2do arco
+        arc = new Arc2D.Float(centerX-radius*1.1f, centerY-radius*1.1f, radius*2.2f, radius*2.2f, 170, 180, Arc2D.CHORD);
+        a.subtract(new Area(arc));
+        
+        // 3er arco
+        arc = new Arc2D.Float(centerX-radius*0.2f, centerY-radius*0.2f, radius*0.4f, radius*0.4f, 0, 180, Arc2D.CHORD);
+        a.subtract(new Area(arc));
+        
+        // dibujamos una region
+        int x1 = (int)(centerX + radius * (1 - smoothLen) * Math.cos(Math.toRadians(10)));
+        int y1 = (int)(centerY - radius * (1 - smoothLen) * Math.sin(Math.toRadians(10)));
+        
+        int x2 = (int)(centerX + radius * Math.cos(Math.toRadians(10)));
+        int y2 = (int)(centerY - radius * Math.sin(Math.toRadians(10)));
+        
+        int x3 = (int)(centerX + radius * Math.cos(Math.toRadians(10) + smoothLen));
+        int y3 = (int)(centerX - radius * Math.sin(Math.toRadians(10) + smoothLen));
+        
+        int x4 = (int)(centerX + radius * 1.05 * Math.cos(Math.toRadians(10) + smoothLen));
+        int y4 = (int)(centerX - radius * 1.05 * Math.sin(Math.toRadians(10) + smoothLen));
+        
+        // Agregamos la nueva cuerva
+        GeneralPath gp = new GeneralPath();
+        // movemos al punto 1
+        gp.moveTo(x1, y1);
+        // dibujamos la curva
+        gp.quadTo(x2, y2, x3, y3);
+        gp.lineTo(x4, y4);
+        x2 = (int)(centerX + radius * 1.05 * Math.cos(Math.toRadians(10-1)));
+        y2 = (int)(centerY - radius * 1.05 * Math.sin(Math.toRadians(10-1)));
+        gp.lineTo(x2, y2);
+        // cerramos la curva
+        gp.closePath();
+        
+        a.subtract(new Area(gp));
+        // la pintamos con color rojo
+        g2d.setColor(Color.YELLOW);
+        g2d.fill(a);
+    }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D)g;
-        test6(g2d);
+        test9(g2d);
     }
     
     public static void main(String[] args) {
