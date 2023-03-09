@@ -24,6 +24,7 @@ import java.awt.geom.Arc2D;
 import java.awt.geom.Area;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
+import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.Calendar;
 import javax.swing.JFrame;
@@ -38,6 +39,7 @@ import javax.swing.JPanel;
 public class Watch12 extends JPanel {
 
     private final Color backgroundColor = new Color(0x4040c0);
+    private final Color backgroundDateColor = new Color(0X101020);
     private final Color hourColor = Color.BLACK;
     private final Color minuteColor = Color.BLACK;
     private final Color secColor = new Color(0xa00000);
@@ -46,6 +48,7 @@ public class Watch12 extends JPanel {
     private final Color shadowColor = new Color(0x0, 0x0, 0x0, 0x30);
     private final Color dayColor = new Color(0x40, 0x40, 0xff);
     private final Color nightColor = new Color(0x10, 0x10, 0x70);
+    private final Color labelDateColor = new Color(0Xbdbd00);
     private final Color gradientA = new Color(224, 224, 224, 128);
     private final Color gradientB = new Color(32, 32, 32, 70);
     private final String title = "Java Watch";
@@ -87,8 +90,8 @@ public class Watch12 extends JPanel {
     private Dimension calDateSize;
     // Tamanio maximo que ocupa el nombre del mes
     private Dimension calMonthSize;
-    
-    private final String[] monthName = {"ENE","FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEPT", "NOV", "DIC"};
+
+    private final String[] monthName = {"ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEPT", "NOV", "DIC"};
 
     public Watch12() {
         super();
@@ -116,11 +119,11 @@ public class Watch12 extends JPanel {
             fcostable[n] = (float) d;
         }
     }
-    
-    private void initFonts(){
+
+    private void initFonts() {
         BufferedImage bi = new BufferedImage(32, 32, BufferedImage.TYPE_INT_RGB);
         Graphics2D g2d = bi.createGraphics();
-        calendarFont =  new Font[3];
+        calendarFont = new Font[3];
         calendarFont[0] = g2d.getFont().deriveFont(Font.BOLD, 28f);
         calendarFont[1] = g2d.getFont().deriveFont(Font.BOLD, 42f);
         calendarFont[2] = g2d.getFont().deriveFont(Font.BOLD, 84f);
@@ -183,15 +186,46 @@ public class Watch12 extends JPanel {
         return fTitleLarge;
     }
 
+    // variables para simular el cambio de dia
+    private static final boolean DEBUGFLAG = false;
+    private static boolean initFlag = true;
+
     private void updateTime() {
         Calendar cal = Calendar.getInstance();
-        month = cal.get(Calendar.MONTH);
-        day = cal.get(Calendar.DATE);
-        hour = cal.get(Calendar.HOUR);
-        minute = cal.get(Calendar.MINUTE);
-        second = cal.get(Calendar.SECOND);
-        ampm = cal.get(Calendar.AM_PM);
-
+        //cal.set(Calendar.DATE, 31);
+        if (!DEBUGFLAG || initFlag) {
+            month = cal.get(Calendar.MONTH);
+            day = cal.get(Calendar.DATE);
+            hour = cal.get(Calendar.HOUR);
+            minute = cal.get(Calendar.MINUTE);
+            second = cal.get(Calendar.SECOND);
+            ampm = cal.get(Calendar.AM_PM);
+        }
+        
+        if(DEBUGFLAG){
+            if(initFlag){
+                hour = 11;
+                minute = 58;
+                second = 50;
+                ampm = 1;
+                initFlag = false;
+                
+                day = 31;
+                
+            }else{
+                second = (second + 1) % 60;
+                if(second == 0){
+                    minute = (minute + 1) % 60;
+                    if(minute == 0){
+                        hour = (hour + 1) % 12;
+                        if(hour == 0){
+                            ampm = 0;
+                        }
+                    }
+                }
+            }
+        }
+        
         // determinamos el inicio de la animacion de cambio de dia
         // validamos si son 11:59  de la noche
         if ((ampm == 1) && (hour == 11) && (minute == 59)) {
@@ -205,41 +239,109 @@ public class Watch12 extends JPanel {
             updatingCalendar = false;
         }
     }
-    
+
     // determina el tamanio del calendarios
-    private void updateCalendarMetrics(Graphics2D g2d){
+    private void updateCalendarMetrics(Graphics2D g2d) {
         calDateSize = new Dimension();
         calMonthSize = new Dimension();
-        
+
         Font saveFont = g2d.getFont();
         g2d.setFont(calendarFont[curFontIndex]);
         FontMetrics fm = g2d.getFontMetrics();
         // heght de la letra
         calDateSize.height = fm.getHeight();
         calMonthSize.height = fm.getHeight();
-        
+
         // calculamos la longitud del dia mas largo
-        for(int n = 1; n <= 31; n++){
+        for (int n = 1; n <= 31; n++) {
             String s = (n < 10) ? "0" + n : String.valueOf(n);
             int width = fm.stringWidth(s);
-            if(width > calDateSize.width){
+            if (width > calDateSize.width) {
                 calDateSize.width = width;
             }
         }
-        for(int n = 0; n < monthName.length; n++){
+        for (int n = 0; n < monthName.length; n++) {
             String s = monthName[n];
             int width = fm.stringWidth(s);
-            if(width > calMonthSize.width){
+            if (width > calMonthSize.width) {
                 calMonthSize.width = width;
             }
         }
-        
+
         g2d.setFont(saveFont);
     }
-    
-    private void drawCalendar(Graphics2D g2d, Rectangle frame){
+
+    private void drawCalendar(Graphics2D g2d, Rectangle frame) {
         // determinamos el tamanio de calendario
         updateCalendarMetrics(g2d);
+
+        // calculamos el rectangulo que ocupara el calendario
+        Rectangle calendarRect = new Rectangle(0, 0, calDateSize.width + calMonthSize.width + 8 * 3, calDateSize.height);
+        // centramos el calendar
+        calendarRect.x = frame.x + (frame.width - calendarRect.width) / 2;
+        calendarRect.y = frame.y + (frame.height / 2 + (int) ((frame.height / 2) * 0.3f));
+
+        // rectangulo con esquinas redondeadas
+        RoundRectangle2D roundRect = new RoundRectangle2D.Float(
+                calendarRect.x, calendarRect.y, calendarRect.width, calendarRect.height,
+                calendarRect.height / 2, calendarRect.height / 2);
+
+        g2d.setColor(backgroundDateColor);
+        g2d.fill(roundRect);
+
+        // redefinimos el rectangulo basado en el original pero mas pequeno
+        roundRect.setRoundRect(
+                // x
+                calendarRect.x + 2,
+                // y
+                calendarRect.y + 2,
+                // width
+                calendarRect.width - 4,
+                // height
+                calendarRect.height - 4,
+                // arcWidth
+                (calendarRect.height - 4) / 2,
+                // arcHeight
+                (calendarRect.height - 4) / 2);
+
+        // Area de Clip
+        Shape saveClip = g2d.getClip();
+        g2d.setClip(new Area(roundRect));
+
+        // dibujamos el dia del calendario
+        g2d.setColor(labelDateColor); // color
+        g2d.setFont(calendarFont[curFontIndex]); // tipo de letra
+        // obtenemos el fontmetrics
+        FontMetrics fm = g2d.getFontMetrics();
+        int x = calendarRect.x + 8; // + 8pixeles
+        int y = calendarRect.y + fm.getAscent();
+
+        // validamos si estamos actualizando el calendario
+        if (updatingCalendar) {
+            // subuimos el texto 1 60avo del alto del calendario * second
+            // dependiendo del numero del segundo sera la posicion
+            // en el segundo 59 subimos el mensaje casi hasta arriba
+            y -= second * ((double) calendarRect.height / 60);
+        }
+
+        g2d.drawString(day < 10 ? "0" + day : String.valueOf(day), x, y);
+        // dibujamos el siguiente dia que salga desde la parte inferior
+        if (updatingCalendar) {
+            g2d.drawString(day_next < 10 ? "0" + day_next : String.valueOf(day_next), x, y + calendarRect.height);
+        }
+
+        // dibujamos el mes del calendario
+        x = calendarRect.x + 8 + calDateSize.width + 8;
+        y = calendarRect.y + fm.getAscent();
+        if (updatingCalendar && (month != month_next)) {
+            y -= second * ((double) calendarRect.height / 60);
+        }
+        g2d.drawString(monthName[month], x, y);
+        if (updatingCalendar && (month != month_next)) {
+            g2d.drawString(monthName[month_next], x, y + calendarRect.height);
+        }
+
+        g2d.setClip(saveClip);
     }
 
     private void updateBackgroundImage(Rectangle bounds, Rectangle frame) {
@@ -279,7 +381,7 @@ public class Watch12 extends JPanel {
             f = getSmallFont(g2d);
             fTitle = getSmallTitleFont(g2d);
         } else if (frame.width < 800) {
-            curFontIndex =1;
+            curFontIndex = 1;
             f = getMediumFont(g2d);
             fTitle = getMediumTitleFont(g2d);
         } else {
@@ -321,7 +423,11 @@ public class Watch12 extends JPanel {
 
         g2d.setFont(fTitle);
         Rectangle2D r = g2d.getFontMetrics().getStringBounds(title, g2d);
-        g2d.drawString(title, (int) (centerX - r.getWidth() / 2), (int) (centerY + radius * 0.3));
+        // dibujamos el titulo: Java Watch
+        g2d.drawString(title, (int) (centerX - r.getWidth() / 2), (int) (centerY + radius * 0.2));
+
+        // dibujamos el calendario dentro de la caratula
+        drawCalendar(g2d, frame);
 
         g2d.dispose();
     }
@@ -514,10 +620,11 @@ public class Watch12 extends JPanel {
                 g2dBack.setClip(saveClip);
             }
             // dibujamos el calendario
-            if(updatingCalendar){
+            if (updatingCalendar) {
+                // cuando son las 11:59 cada segundo se redibuja el calendario
                 drawCalendar(g2dBack, frame);
             }
-            
+
             g2dBack.dispose();
         }
         // pintamos la caratula
