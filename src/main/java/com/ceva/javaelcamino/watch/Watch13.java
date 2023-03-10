@@ -76,18 +76,24 @@ public class Watch13 extends JPanel {
     
     private static final String[] monthNames = new String[] {"ENE","FEB","MAR","ABR","MAY","JUN","JUL","AGO","SEP","OCT","NOV","DIC"};
 
+    // componente que informa cada segundo a Watch13 que se debe re-dibujar e informar el cambio de fecha a los componentes 
+    // que lo requieran
     private class WatchTimer {
+        // para determinar si hubo un cambio de segundo y minuto
         private int lastSecond = -1; // Para garantizar que la primera vez siempre sea diferente a second
         private int lastMinute = -1; // Para garantizar que la primera vez siempre sea diferente a minute
-        private Set<ClockComponent> secondListeners = new HashSet<>();
+        // lista de objetos que quieren enterarse de un evento
+        // secondListeners contiene los componentes que quieren saber cuando haya pasado un segundo
+        private Set<ClockComponent> secondListeners = new HashSet<>(); // 
+        // contiene a los componentes que quiere saber cuando haya pasado un minuto
         private Set<ClockComponent> minuteListeners = new HashSet<>();
         private javax.swing.Timer timer;
         
         private WatchTimer() {
-            updateTime();
+            updateTime();// atualizamos la hora
             timer = new javax.swing.Timer(1000, e -> {
                 updateTime();
-                repaint();
+                repaint();// call repaint() de la clase Watch13
             });
             timer.start();
         }
@@ -111,6 +117,7 @@ public class Watch13 extends JPanel {
         private void removeSecondListener(ClockComponent c) {
             secondListeners.remove(c);
         }
+        // actualizamos la hora
         
         private void updateTime() {
             Calendar cal = Calendar.getInstance();
@@ -143,13 +150,15 @@ public class Watch13 extends JPanel {
                     }
                 }
             }
-
+            // informamos a los listener que se encuentran en la lista cuando haya cambio de minuto y segundo
             if (second != lastSecond) {
+                // informamos a todos los componentes que cambio el segundo
                 for (ClockComponent c : secondListeners)
                     c.update();
                 lastSecond = second;
             }
             if (minute != lastMinute) {
+                // informamos a todos los componentes que cambio el minuto
                 for (ClockComponent c : minuteListeners)
                     c.update();
                 lastMinute = minute;
@@ -157,6 +166,7 @@ public class Watch13 extends JPanel {
         }
     }
     
+    // Manecillas del reloj
     private class ClockHands {
         private Rectangle bounds;
         
@@ -216,30 +226,39 @@ public class Watch13 extends JPanel {
     }
     
     private abstract class ClockComponent {
+        // se utiliza cuando cambia el tamanio de la ventana
         protected abstract void setBounds(Rectangle bounds);
+        // metodo para dibujar el componente
         protected abstract void paint(Graphics2D g2d);
+        // true si el componente necesita re-dibujarse
         protected boolean isDirty() {
             return true;
         }
+        // metodo que permite al timer informar al componente que la hora ha cambiado
         protected void update() {
         }
     }
     
+    // encapsulamos toda la funcionalidad del Java Watch
     private class ClockCover {
         private final String title = "Java Watch";
         private Rectangle frame;
         private Rectangle bounds;
         private BufferedImage backgroundImage;
+        // guardamos todos los componentes
         private List<ClockComponent> children;
         
         private ClockCover() {
-            children = new LinkedList<>();
+            children = new LinkedList<>(); // inicializar la coleccion
+            // creamos una instancia de la caratula dia/noche
             DayNightCover dayNight = new DayNightCover();
             children.add(dayNight);
+            // creamos una instancia del calendario
             CalendarCover calendarCover = new CalendarCover();
             children.add(calendarCover);
         }
         
+        // llamamos al metodo cada vez que el panel cambie de tamanio
         private void setBounds(Rectangle frame) {
             this.frame = frame;
 
@@ -248,7 +267,7 @@ public class Watch13 extends JPanel {
             for (ClockComponent child : children) {
                 child.setBounds(bounds);
             }
-            redrawBackgroundImage();
+            redrawBackgroundImage(); // informamos a todos los hijos el cambio de tamanio
         }
         
         private void redrawBackgroundImage() {
@@ -337,12 +356,16 @@ public class Watch13 extends JPanel {
             g2d.dispose();
         }
         
+        // dibujamos el reloj con sus hijos
+        // cuando llamamos a paint() el metodo setBounds() hizo que se dibujara la caratula en backgroundImage
         private void paint(Graphics2D g2d) {
             Graphics2D innerGraphics = null;
             for (ClockComponent child : children) {
+                // verificamos si los hijos necesitan una actualizacion
                 if (child.isDirty()) {
                     if (innerGraphics == null)
                         innerGraphics = backgroundImage.createGraphics();
+                    // si el hijo necesita re-dibujarse llamamos al metodo paint() del hijo
                     child.paint(innerGraphics);
                 }
             }
@@ -353,6 +376,7 @@ public class Watch13 extends JPanel {
         }
     }
     
+    // caratula dia/noche
     private class DayNightCover extends ClockComponent {
         private Rectangle bounds;
         private BufferedImage dayNightImage;
@@ -361,6 +385,7 @@ public class Watch13 extends JPanel {
         private float dnRadius;         // Radio de imagen dia/noche
 
         private DayNightCover() {
+            // informamos al timer cada vez que pasa 1 minuto
             watchTimer.setMinuteListener(this);
         }
 
@@ -374,9 +399,12 @@ public class Watch13 extends JPanel {
             return dirty;
         }
         
+        // cuando se presente un cambio en el tamanio del componente, se llama a setBounds
         @Override
         protected void setBounds(Rectangle bounds) {
+            // actualizamos el tamanio del rectangulo
             this.bounds = bounds;
+            // redibujamos la caratula
             createDayNightImage();
             dirty = true;
         }
@@ -526,9 +554,11 @@ public class Watch13 extends JPanel {
         }
     }
     
+    // 
     private class CalendarCover extends ClockComponent {
         private Rectangle bounds;
         private boolean dirty;
+        // informamos si el calendario esta actualizandose cada segundo
         private boolean secondListening;
         private int lastDay = -1;
         private int day_next;
@@ -537,6 +567,7 @@ public class Watch13 extends JPanel {
         private Dimension calMonthSize;
 
         public CalendarCover() {
+            // informamos cada minuto se hay un cambio
             watchTimer.setMinuteListener(this);
             secondListening = false;
         }
@@ -553,11 +584,13 @@ public class Watch13 extends JPanel {
             return dirty;
         }
         
+        // este metodo sera invocado 60 veces durante el ultimo minuto del dia (11:59)
+        // es decir, el timer informara cada minuto pero a las 11:59 sera cada segundo
         private void startSecondListening() {
             if (!secondListening) {
                 watchTimer.setSecondListener(this);
                 secondListening = true;
-                
+                // determinamos el siguiente dia y mes
                 Calendar cal = Calendar.getInstance();
                 cal.add(Calendar.DATE, 1);
                 day_next = cal.get(Calendar.DATE);
@@ -571,14 +604,19 @@ public class Watch13 extends JPanel {
             dirty = true; // Ultima actualizacion de cambio de dia.
         }
 
+        // el calendario solo necesita actualizarse 1 vez al dia
         @Override
         protected void update() {
+            // comparamos el dia actual con el dia registrado la ultima vez para determina si el componente
+            // necesita re-dibujarse
             if (day != lastDay) {
+                // indicamos que es necesario re-dibujarse
                 dirty = true;
                 lastDay = day;
             }
-            
+            // el cambio de dia ocurre a 11:59
             if ((ampm == 1) && (hour == 11) && (minute == 59)) {
+                // indicamos al timer que hay qie informar cada segundo
                 startSecondListening();
                 dirty = true;
             } else if (secondListening) {
@@ -670,13 +708,15 @@ public class Watch13 extends JPanel {
         super();
         initSinCosTable();
         initFonts();
-        
+        // agregamos un listener que se invoca cuando el panel cambia de tamanio
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
+                // se encarga de cambiar el tamanio de los componentes
                 panelResized();
             }
         });
+        // re-dibujamos la pantalla
         watchTimer = new WatchTimer();
     }
     
@@ -693,11 +733,13 @@ public class Watch13 extends JPanel {
         if (clockCover == null) {
             clockCover = new ClockCover();
         }
+        // asignamos el nuevo tamanio del panel
         clockCover.setBounds(bounds);
         
         if (clockHands == null) {
             clockHands = new ClockHands();
         }
+        // asignamos el nuevo tamanio del panel
         clockHands.setBounds(frame);
     }
     
@@ -764,7 +806,7 @@ public class Watch13 extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
-        
+        // delegamos el trabajo de dibujar a los componentes clockCover y clockHands
         if (clockCover != null)
             clockCover.paint(g2d);
         if (clockHands != null)
