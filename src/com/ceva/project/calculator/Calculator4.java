@@ -2,26 +2,27 @@ package com.ceva.project.calculator;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-public class Calculator3 extends JPanel{
+public class Calculator4 extends JPanel{
     //private Color backgroundColor = new Color(0xc3cdc8); // color pantalla
     private Color backgroundColor = new Color(0x03f705); // color pantalla
 
-    private LCD7Seg digit;
-    private javax.swing.Timer timer;
+//    private LCD7Seg digit;
+    private Timer timer;
     private int digitValue;
+    private NDigitDisplay display;
     /**
      * Parametros para definir el tamanio de ventana
-     * @param x
-     * @param y
-     * @param digitWidth ancho del digito
      */
-    public Calculator3(int x, int y, int digitWidth){
+    public Calculator4(){
         super();
         setBackground(backgroundColor);
-        digit = new LCD7Seg(x, y, digitWidth);
+        display = new NDigitDisplay(getWidth(), getHeight(), 9);
+        //display.setValue(1234567890);
         // cuando se produzca un cambio de propiedad damos aviso con el listener
         addPropertyChangeListener((evt -> {
             if("quit".equals(evt.getPropertyName()) && (Boolean)evt.getNewValue()){
@@ -31,8 +32,19 @@ public class Calculator3 extends JPanel{
             }
         }));
 
+        // detectamos cuando se produce un cambio en el tamanio de la pantalla
+        addComponentListener(new ComponentAdapter() {
+            // este metodo se llama cuando el componente cambio de tamanio y sucede cuando se muestra la pantalla
+            @Override
+            public void componentResized(ComponentEvent e) {
+                // cuando se muestre la pantalla se ajusta el tamanio
+                display.setSize(getWidth(), getHeight());
+            }
+        });
+
+        digitValue = -2;
         // probamos que se dibujen todos los numeros
-        timer = new javax.swing.Timer(1000, (e -> {
+        timer = new Timer(1000, (e -> {
             updateNextValue();
             repaint();
         }));
@@ -40,20 +52,30 @@ public class Calculator3 extends JPanel{
     }
 
     private void updateNextValue(){
-        digitValue = (digitValue+1) % 17;
-        digit.setValue(digitValue);
+        // efecto reset de la pantalla
+        if((digitValue < 0) && (digitValue >= -2)){
+            digitValue++;
+            display.clear();
+        }else{
+            digitValue *= 2;
+            display.setValue(digitValue);
+            // no aseguramos que digitValue no se quede en cero
+            if(digitValue == 0){
+                digitValue = 1;
+            }
+        }
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D)g;
-        digit.paintComponent(g2d);
+        display.paintComponent(g2d);
     }
 
     public static void main(String[] args) {
-        javax.swing.SwingUtilities.invokeLater(()->{
-            Calculator3 mainPanel = new Calculator3(10, 10, 150);
+        SwingUtilities.invokeLater(()->{
+            Calculator4 mainPanel = new Calculator4();
 
             JFrame frame = new JFrame();
             frame.setTitle("Calculator 3");
@@ -69,7 +91,8 @@ public class Calculator3 extends JPanel{
                     mainPanel.firePropertyChange("quit", false, true);
                 }
             });
-            frame.setContentPane(mainPanel);
+
+            frame.add(mainPanel, BorderLayout.CENTER);
             frame.pack();
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);

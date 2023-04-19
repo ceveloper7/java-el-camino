@@ -5,15 +5,15 @@ import java.awt.*;
 /**
  * Construccion de un digito LCD de 7 segmentos
  */
-public class LCD7seg {
+public class LCD7Seg {
     // definimos el bit que corresponde a cada segmento
-    private static final int SEGMENT_0 = 0x1; // bit 1 - binario    1
-    private static final int SEGMENT_1 = 0x2; // bit 2 - binario   10
-    private static final int SEGMENT_2 = 0x4; // bit 4 - binario  100
-    private static final int SEGMENT_3 = 0x8; // bit 8 - binario 1000
-    private static final int SEGMENT_4 = 0x10; // bit 16
-    private static final int SEGMENT_5 = 0x20; // bit 32
-    private static final int SEGMENT_6 = 0x40; // bit 64
+    public static final int SEGMENT_0 = 0x1; // bit 1 - binario    1
+    public static final int SEGMENT_1 = 0x2; // bit 2 - binario   10
+    public static final int SEGMENT_2 = 0x4; // bit 4 - binario  100
+    public static final int SEGMENT_3 = 0x8; // bit 8 - binario 1000
+    public static final int SEGMENT_4 = 0x10; // bit 16
+    public static final int SEGMENT_5 = 0x20; // bit 32
+    public static final int SEGMENT_6 = 0x40; // bit 64
 
     private Color segmentColor = new Color(0x000000);
     private Color disableSegmentColor = new Color(0,0,0,16);
@@ -29,7 +29,7 @@ public class LCD7seg {
     private int y;
     private int digitWidth;
     private int segmentWidth;
-    public LCD7seg(int x, int y, int digitWidth){
+    public LCD7Seg(int x, int y, int digitWidth){
         // definimos los bits que vamos a encender
         this.segmentState = SEGMENT_0 | SEGMENT_1 | SEGMENT_2 | SEGMENT_3 | SEGMENT_4 | SEGMENT_5 | SEGMENT_6;
         this.x = x;
