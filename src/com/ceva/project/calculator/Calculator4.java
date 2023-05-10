@@ -8,8 +8,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class Calculator4 extends JPanel{
-    //private Color backgroundColor = new Color(0xc3cdc8); // color pantalla
-    private Color backgroundColor = new Color(0x03f705); // color pantalla
+    private Color backgroundColor = new Color(0xc3cdc8); // color pantalla
+    // private Color backgroundColor = new Color(0x03f705); // color pantalla
 
 //    private LCD7Seg digit;
     private Timer timer;
