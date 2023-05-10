@@ -91,7 +91,7 @@ public class CalcKey extends JPanel {
     }
 
     // metodo para cambiar el color a la tecla
-    public void setKeyColor(){
+    public void setKeyColor(Color keyColor){
         this.keyColor = keyColor;
     }
 
