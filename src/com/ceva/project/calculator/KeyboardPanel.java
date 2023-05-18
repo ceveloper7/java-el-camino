@@ -5,6 +5,11 @@ import java.awt.GridBagLayout;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import javax.swing.JPanel;
+
+/**
+ * Clase que contiene todas las teclas y observa (listener) cada uno de los eventos
+ * que cada una genera.
+ */
 public class KeyboardPanel extends JPanel {
     private static final char[] keyLabels = {
             'L', 'O', 'C', '/',

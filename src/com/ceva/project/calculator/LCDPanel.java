@@ -61,6 +61,8 @@ public class LCDPanel extends JPanel {
         int lenValue = value.length();
         // ubicamos la posicion del punto decimal si existe
         dotIndex = value.indexOf(".");
+        if(dotIndex == -1)
+            dotIndex = value.indexOf(",");
         // var n para dibujar digits de la pantalla
         int n = lenValue - 1;
         if (dotIndex == -1)
@@ -76,7 +78,7 @@ public class LCDPanel extends JPanel {
             char ch = value.charAt(idx);
             if ((ch >= '0') && (ch <= '9'))
                 digits[n].setValue(ch - '0');
-            else if (ch == '.') {
+            else if ((ch == '.') || (ch == ',')) {
                 idx++;
                 continue;
             } else
