@@ -134,6 +134,7 @@ public class LCDPanel extends JPanel {
             displayError();
         }
         dotIndex = 0;
+        repaint();
     }
 
     public void clear() {

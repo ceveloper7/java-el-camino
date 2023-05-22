@@ -2,6 +2,9 @@ package com.ceva.project.calculator;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Clase que actuamo como observador (listener) del teclado
@@ -100,7 +103,7 @@ public class Calculator8 implements KeyListener{
             // validaos q no haya errores
             if(!errorFlag){
                 // si no hay errores, formateamos el resultado (res) hasta 9 decimales
-                strRes = String.format("%.9f", res);
+                strRes = String.format(Locale.ROOT,"%.9f", res);
             }
             else{
                 strRes = "";
@@ -162,8 +165,53 @@ public class Calculator8 implements KeyListener{
      */
     @Override
     public void keyPressed(char code) {
+        // C = Clear / CA = Clear All
+        if(code == 'C'){
+            if(edValue.length() > 0){
+                // clear
+                edValue.setLength(0);
+            }
+            // clear all
+            else if(lastValue.length() > 0){
+                lastValue.setLength(0);
+                op = 0;
+            }else{
+                op = 0;
+            }
+            screen.setValue(0);
+        }
+        // caso OFF apagado
+        else if(code == 'O'){
+            // timer para apreciar al animacion al momento de cerra la calculadora
+            Timer timer = new Timer(true);
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    mainFrame.dispose();
+                }
+            }, 400);
+        }
+        // caso si activamos la pantalla de iluminacion
+        else if(code == 'L'){
+            screen.setLight();
+        }
         // validamos las operaciones basicas
-        if((code == '+') || (code == '-') || (code == '*') || (code == '/')){
+        else if((code == '+') || (code == '-') || (code == '*') || (code == '/')){
+            /**
+             * en las calculadoras cuando escribimos 1 + 2 + automaticamente hace la suma y da 3
+             * por lo que un signo + se puede leer como un realiza la operacion pendiente
+             */
+            if(op != 0){
+                calculate();
+                if(edValue.length() > 0){
+                    screen.setValue(edValue);
+                }
+            }
+            // en el caso que comenzamos escribiendo el signo negativo
+            else if((code == '-') && (lastValue.length() == 0) && (edValue.length() == 0)){
+                edValue.append(code);
+                return;
+            }
             op =  code;
             // limpiamos lastValue
             lastValue.setLength(0);
@@ -172,6 +220,11 @@ public class Calculator8 implements KeyListener{
         }
         // validamos si se presiona el signo =
         else if(code == '='){
+            // validamos en caso que no se ingreso numeros pero se presiona =
+            if((op == 0) || (lastValue.length() == 0) || (edValue.length() == 0)){
+                // no hacemos nada
+                return;
+            }
             calculate();
             if(edValue.length() > 0){
                 screen.setValue(edValue);
