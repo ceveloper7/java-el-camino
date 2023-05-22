@@ -2,6 +2,12 @@ package com.ceva.project.calculator;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.geom.Rectangle2D;
+import java.awt.geom.RoundRectangle2D;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -37,16 +43,86 @@ public class Calculator8 implements KeyListener{
     private void start(){
         javax.swing.SwingUtilities.invokeLater(()->{
             mainFrame = new JFrame("Calculator 8");
+            // quitamos el titulo de ventana
+            mainFrame.setUndecorated(true);
             Dimension minSize = new Dimension(300, (int)(300*1.6));
             mainFrame.setMinimumSize(minSize);
             mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
             CalcLookAndFeel lookAndFeel= new CalcLookAndFeel();
             mainFrame.setBackground(lookAndFeel.getKeyboardBackgroundColor());
-            JPanel globalPanel = new JPanel();
+            // aplicamos el efecto 3D, empieza en oscuro y termina en claro
+            CalcMainPanel globalPanel = new CalcMainPanel(lookAndFeel, this);
+            // JPanel globalPanel = new JPanel();
             globalPanel.setBackground(lookAndFeel.getKeyboardBackgroundColor());
             LayoutManager layout = new BoxLayout(globalPanel, BoxLayout.PAGE_AXIS);
             globalPanel.setLayout(layout);
+
+            // listener para movimiento del raton en la ventana
+            MouseAdapter mouseAdapter = new MouseAdapter() {
+                Point pt = new Point();
+                Dimension size = new Dimension(); // tamano de la ventana
+                // if true == move
+                // if false == resize
+                boolean moveOrResize;
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    // determinamos en que punto se presiono el raton
+                    pt.x = e.getX();
+                    pt.y = e.getY();
+
+                    // si presionamos el raton en la iz inferior derecha
+                    // se interpreta como queriendo modificar la ventana
+                    size.setSize(mainFrame.getSize()); // pasamos tamano del JFrame
+                    /**
+                     * si el mouse se encuentra mas alla de los 40px y
+                     * la coordenada y es mas grande que el alto de la ventana menos 40px
+                     * entonces eso significa que se trata de un resize
+                     * por otro lado
+                     * Si es el punto esta fuera del rango de los 40px entonces
+                     * significa que es un move pero si esta dentro del rango es un resize
+                     */
+                    moveOrResize = !((pt.x >= (size.width - 40)) && (pt.y >= (size.height - 40)));
+                }
+
+                @Override
+                public void mouseDragged(MouseEvent e) {
+                    if(moveOrResize){
+                        // el usuario mueve el raton mientras el boton se mantiene presionado
+                        mainFrame.setLocation(e.getXOnScreen() - pt.x, e.getYOnScreen() - pt.y);
+                    }
+                    // cambiamos el tamano de la ventana
+                    else{
+                        mainFrame.setSize(
+                                size.width + e.getX()-pt.x, size.height + e.getY() - pt.y
+                        );
+                    }
+                }
+            };
+            globalPanel.addMouseListener(mouseAdapter);
+            globalPanel.addMouseMotionListener(mouseAdapter);
+
+            /**
+             * Aplicamos al JFrame la forma (shape) rectangular con esquinas redondeadas
+             * aplicamos esta forma en el evento que se produce cuando se cambia el
+             * tamano de la ventana
+             */
+            globalPanel.addComponentListener(new ComponentAdapter() {
+                @Override
+                public void componentResized(ComponentEvent e) {
+                    // e.getComponent() nos dice cual componente se esta cambiando el tamano
+                    Rectangle bounds = e.getComponent().getBounds();
+                    screen.setPreferredSize(new Dimension(bounds.width, bounds.height/5));
+                    keyPad.setPreferredSize(new Dimension(bounds.width, bounds.height*4/5));
+                    // hacemos un re-layout
+                    e.getComponent().validate();
+
+                    // definimos nuestro shape
+                    RoundRectangle2D rr2d = new RoundRectangle2D.Double(0,0, bounds.width, bounds.height, 24, 24);
+                    mainFrame.setShape(rr2d);
+                }
+            });
+
             // cremos los componentes para agregarlos
             screen = new LCDPanel(numDigits, lookAndFeel);
             screen.setPreferredSize(new Dimension(minSize.width, minSize.height/5));
@@ -62,6 +138,10 @@ public class Calculator8 implements KeyListener{
             mainFrame.setLocationRelativeTo(null);
             mainFrame.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             mainFrame.setVisible(true);
+
+            // para que los eventos del teclado sean recibidos hay que indicarle a AWT
+            // que el componente sera quien reciba los eventos con el metodo setRequestFocus()
+            globalPanel.requestFocus();
         });
     }
     public static void main(String[] args) {
