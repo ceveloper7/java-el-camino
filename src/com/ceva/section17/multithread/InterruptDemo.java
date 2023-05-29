@@ -1,6 +1,7 @@
 package com.ceva.section17.multithread;
 
 public class InterruptDemo {
+    private static final Object lock = new Object();
     private static void interruptDemo1(){
         Thread t = new Thread(()->{
             System.out.println("Iniciando Thread");
@@ -81,6 +82,32 @@ public class InterruptDemo {
         stopFlag = true;
     }
 
+    // metodo apropiado para realizar interrupciones con Tread
+    private static volatile boolean condition = false;
+    private static void interrupted4(){
+        Thread t = new Thread(()->{
+            System.out.println("Iniciando Thread...");
+            synchronized (lock){
+                while(!condition){
+                    try{
+                        lock.wait();
+                    }
+                    catch (InterruptedException e){}
+                }
+            }
+            System.out.println("Thread ha terminado...");
+        });
+        t.start();
+
+        try{
+            Thread.sleep(3000);
+        }
+        catch(InterruptedException e){}
+        synchronized (lock){
+            condition = true;
+            lock.notify();
+        }
+    }
     public static void main(String[] args) {
         interruptDemo1();
     }
