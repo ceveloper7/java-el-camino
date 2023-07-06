@@ -5,6 +5,9 @@ import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Clase que maneja toda las funcionalidades de las animaciones
+ */
 public class DrawingPanel extends JPanel implements Runnable, IAnimationLoopController{
     private final List<Runnable> callbackList = new LinkedList<>();
     private List<IAnimationLoops> animations = new LinkedList<>();
