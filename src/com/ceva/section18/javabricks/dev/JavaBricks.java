@@ -23,6 +23,10 @@ public class JavaBricks extends DrawingPanel{
         // obtenemos el tamanio de la ventana
         Rectangle bounds = getBounds();
         addAnimationLopp(new Background(bounds));
+        addAnimationLopp(new BlinkMessageLoop(
+                bounds, "Biblia de las Americas", "Subtitulo ",
+                this, new BrickAnimationLoop(), Color.BLUE, Color.YELLOW, 8
+        ));
         startAnimationThread();
     }
 
