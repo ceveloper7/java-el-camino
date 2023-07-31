@@ -51,7 +51,7 @@ public class Ball {
         this.screenSize = screenSize;
     }
 
-    // nos aseguramos que la coordenada no se pase de la pantalla
+    // nos aseguramos que la pelota no se pase de la pantalla
     void checkForScreenSize() {
         if (x+size > screenSize.width)
             x = screenSize.width-size;

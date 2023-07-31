@@ -25,21 +25,22 @@ public class JavaBricks extends DrawingPanel{
         addAnimationLopp(new Background(bounds));
         // indicamos que un rectangulo cambie de amarillo a naranja en 3 segundos
         // movemos el rectangulo de 100 100 a 285 380 de Magenta a Blanco en 3 seg
-        BrickEffectLoop l1 = new BrickEffectLoop(
-                this,
-                new Rectangle(100, 100, 100, 20),
-                new Rectangle(285, 380, 100, 100),
-                Color.MAGENTA, Color.WHITE, 60*3);
+//        BrickEffectLoop l1 = new BrickEffectLoop(
+//                this,
+//                new Rectangle(100, 100, 100, 20),
+//                new Rectangle(285, 380, 100, 100),
+//                Color.MAGENTA, Color.WHITE, 60*3);
         // cuando se termina la primera animacion, agregamos una nueva animacion
         // movemos el rectangulo de 285 380 a 100 100 de blanco a rojo en 3 seg
-        l1.setOnFinished(()->{
-            addAnimationLopp(new BrickEffectLoop(
-                    this,
-                    new Rectangle(285, 380, 100, 100),
-                    new Rectangle(450, 100, 100, 20),
-                    Color.WHITE, Color.RED, 60*3));
-        });
-        addAnimationLopp(l1);
+//        l1.setOnFinished(()->{
+//            addAnimationLopp(new BrickEffectLoop(
+//                    this,
+//                    new Rectangle(285, 380, 100, 100),
+//                    new Rectangle(450, 100, 100, 20),
+//                    Color.WHITE, Color.RED, 60*3));
+//        });
+//        addAnimationLopp(l1);
+        new BrickAnimationLoop(this, bounds, getBackground());
         startAnimationThread();
     }
 

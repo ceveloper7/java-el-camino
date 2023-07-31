@@ -2,6 +2,7 @@ package com.ceva.section18.javabricks.dev;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyListener;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,7 +30,14 @@ public class DrawingPanel extends JPanel implements Runnable, IAnimationLoopCont
 
     @Override
     public void removeAnimationLoop(IAnimationLoops loop) {
-        invokeLater(() -> animations.remove(loop));
+
+        invokeLater(() -> {
+            animations.remove(loop);
+            KeyListener k = loop.getKeyListener();
+            if(k != null){
+                removeKeyListener(k);
+            }
+        });
     }
 
     @Override
@@ -39,7 +47,14 @@ public class DrawingPanel extends JPanel implements Runnable, IAnimationLoopCont
 
     @Override
     public void addAnimationLopp(IAnimationLoops loop) {
-        invokeLater(() -> animations.add(loop));
+
+        invokeLater(() -> {
+            animations.add(loop);
+            KeyListener k = loop.getKeyListener();
+            if(k != null){
+                addKeyListener(k);
+            }
+        });
     }
 
     @Override
