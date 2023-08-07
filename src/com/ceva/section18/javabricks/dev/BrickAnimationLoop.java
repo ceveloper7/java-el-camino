@@ -23,17 +23,17 @@ public class BrickAnimationLoop implements IAnimationLoops{
     private int lastPadDir = 0;
     private int padDir = 0;
     private int score = 0;
+    private boolean paused = false;
     private List<Brick> bricks = new LinkedList<Brick>();
     private IAnimationLoopController mainLoopController;
     private LivesIndicator livesIndicator;
     private Rectangle screenSizeBounds;
+    // numero de vidas
+    private int nextLifeAt;
     public BrickAnimationLoop(IAnimationLoopController mainLoopController, Rectangle screenSizeBounds, Color backgroundColor){
         this.mainLoopController = mainLoopController;
         this.backgroundColor = backgroundColor;
         this.screenSizeBounds = screenSizeBounds;
-
-        keyListener = initKeyListener();
-        livesIndicator = new LivesIndicator(screenSizeBounds, Config.STARTLIVES, pad.getColor());
 
         // inicio del pad
         int padWidth = 75;
@@ -51,8 +51,13 @@ public class BrickAnimationLoop implements IAnimationLoops{
 
         initBricks();
 
+        keyListener = initKeyListener();
+        livesIndicator = new LivesIndicator(screenSizeBounds, Config.STARTLIVES, pad.getColor());
+        nextLifeAt = Config.EXTRALIVESAT;
+
         // BrickAnimationLoop se agrega a si mismo en la lista de animaciones
         mainLoopController.addAnimationLopp(this);
+
     }
 
     /*
@@ -130,8 +135,53 @@ public class BrickAnimationLoop implements IAnimationLoops{
         return keyListener;
     }
 
-    public void pause(){}
-    public void unPause(){}
+    public void pause(){
+        paused = true;
+    }
+    public void unPause(){
+        paused = false;
+    }
+
+    private void addReadyLoop(){
+        mainLoopController.addAnimationLopp(new BlinkMessageLoop(
+                screenSizeBounds,
+                Config.readyMessage,
+                Config.useArrowKeys,
+                mainLoopController,
+                this,
+                Config.backgroundColor,
+                Config.dialogTextColor,
+                8
+        ));
+    }
+
+    private void resetPad(){
+        Rectangle padBounds = pad.getBounds();
+        // no es necesario reiniciar Y porque el pad nunca se mueve en la coordenada Y
+        pad.setX(screenSizeBounds.width/2 - padBounds.width/2);
+    }
+    private void resetBall(){
+        ball.setPlayerFailed(false);
+        Rectangle padBounds = pad.getBounds();
+        ball.setPosition(padBounds.x + padBounds.width/2 -
+                ball.getSize()/2, padBounds.y - ball.getSize(), 1, -1);
+    }
+
+    private void nextChance(){
+        if(livesIndicator.getLives() > 0){
+            // aun tenemos vida, damos la sgte oportunidad (next live)
+            // quitamos una vida
+            livesIndicator.setLives(livesIndicator.getLives()-1);
+            // reinicio del juego (pad y pelota en medio de la pantalla)
+            resetPad();
+            resetBall();
+            // pequena pausa
+            addReadyLoop();
+
+        }else{
+            // game over
+        }
+    }
 
     /*
      * al momento de tocar con la pelota un brick aplicamos un efecto al borrado del brick
@@ -173,10 +223,17 @@ public class BrickAnimationLoop implements IAnimationLoops{
     }
     @Override
     public void nextFrame(Rectangle screenBounds) {
+        // en cada cuadro actualizamos el tamano de la pantalla
+        screenSizeBounds = screenBounds;
+        // verificamos si paused es true
+        if(paused)
+            return;
+
         movePad();
-        // validamos que existan bricks en el scenario
+        ball.checkForScreenSize();
+        // validamos que existan bricks en el scenario y manejamos su colision
         if(bricks.size() > 0){
-            // Iteramos los bricks de la pantalla
+            // Iteramos los bricks de la pantalla para saber si hubo colision
             for(Iterator<Brick> it = bricks.iterator(); it.hasNext();){
                 Brick b = it.next();
                 // validamos si se produce colision
@@ -192,12 +249,48 @@ public class BrickAnimationLoop implements IAnimationLoops{
                     }else{
                         score += 10;
                     }
+                    // cada 1000 puntos, agrega una vida
+                    if(score >= nextLifeAt){
+                        int curLives = livesIndicator.getLives();
+                        // validamos si las vidas actuales son menor a 20
+                        if(curLives < Config.MAXLIVES){
+                            // incrementamos el numero de vidas
+                            livesIndicator.setLives(curLives + 1);
+                        }
+                        nextLifeAt += Config.EXTRALIVESAT;
+                    }
+                    // al encontrar el brick que hace colision, salimos del for
+                    break;
                 }
             }
         }
 
-        ball.checkForScreenSize();
+        // manejamos la colision de la pelota con el pad
+        if(ball.testForHit(pad)){
+
+        }
+
         ball.nextFrame();
+
+        // validamos si perdio
+        if(ball.playerFailed()){
+            pause(); // pausamos el juego
+            // reinicio del pad, pelota y mensaje ready
+            pad.setVisible(false);
+            // aplicamos efecto de desvanecimiento del pad
+            BrickEffectLoop bel =  new BrickEffectLoop(
+                    mainLoopController,
+                    pad.getBounds(),
+                    pad.getBounds(),
+                    pad.getColor(),
+                    backgroundColor, 60);
+            // comenzamos la sgte vida
+            bel.setOnFinished(()->{
+                nextChance();
+            });
+            mainLoopController.addAnimationLopp(bel);
+
+        }
     }
 
     @Override

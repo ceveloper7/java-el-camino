@@ -18,6 +18,14 @@ public class LivesIndicator {
         this.color = color;
     }
 
+    public int getLives(){
+        return numerOfLives;
+    }
+
+    public void setLives(int numerOfLives){
+        this.numerOfLives = numerOfLives;
+    }
+
     /*
      * dibujamos en la parte superior derecha de la pantalla numero de vida
      */
