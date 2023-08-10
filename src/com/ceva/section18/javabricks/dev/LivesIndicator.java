@@ -22,6 +22,14 @@ public class LivesIndicator {
         return numerOfLives;
     }
 
+    // obtenemos el rectangulo que ocupa la ultima vida
+    public Rectangle getLastLifeBounds(){
+        Rectangle r = new Rectangle(bounds.width-16, bounds.y+10, 16, 4);
+        // obtenemos la coordenada
+        r.x -= (6*numerOfLives) + (r.width * (numerOfLives-1));
+        return r;
+    }
+
     public void setLives(int numerOfLives){
         this.numerOfLives = numerOfLives;
     }
