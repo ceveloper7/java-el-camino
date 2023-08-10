@@ -72,8 +72,8 @@ public class BrickAnimationLoop implements IAnimationLoops{
                 mainLoopController,
                 5*60,
                 ()->{
-                    // cuando se cumplan los 5 segundos, volvemos a la velocidad normal
-                    pad.setPadSpeed(lastSpeed);
+                    // cuando se cumplan los 5 segundos, volvemos a la velocidad normal de 5
+                    pad.setPadSpeed(5);
                 }
         ));
     }
@@ -83,15 +83,15 @@ public class BrickAnimationLoop implements IAnimationLoops{
         int s = lastSpeed * 2; // reducir velocidad a la metidad
         if(s < 20){
             // velocidad a la mitad para el pad
-            pad.setPadSpeed(pad.getPadSpeed() / 2 );
+            pad.setPadSpeed(pad.getPadSpeed() * 2 );
         }
         // slowBonus va a durar una cantidad finita de tiempo
         mainLoopController.addAnimationLopp(new DelayLoop(
                 mainLoopController,
                 5*60,
                 ()->{
-                    // cuando se cumplan los 5 segundos, volvemos a la velocidad normal
-                    pad.setPadSpeed(lastSpeed);
+                    // cuando se cumplan los 5 segundos, volvemos a la velocidad normal de 5
+                    pad.setPadSpeed(5);
                 }
         ));
     }
