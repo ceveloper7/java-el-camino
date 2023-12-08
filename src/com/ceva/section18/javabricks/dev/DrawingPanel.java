@@ -16,7 +16,7 @@ public class DrawingPanel extends JPanel implements Runnable, IAnimationLoopCont
     private boolean done;
     private long startTime;
     // 60 cuadros por segundo
-    private final static int FPS = 60;
+    private final static int FPS = 50;
     private long delayMillis;
 
     // iniciamos un hilo para la animacion
