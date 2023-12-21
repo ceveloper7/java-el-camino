@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--nodo raiz-->
+<connectionList>
+    <!--node / connection name-->
+    <connection name="dev">
+        <driver>org.apache.derby.jdbc.ClientDriver</driver>
+        <url>jdbc:derby://localhost:1527/c:/java-development/javaPathDB</url>
+        <usr>anonymous</usr>
+        <pwd>guest</pwd>
+    </connection>
+    <connection name="test">
+        <url>jdbc:mysql://localhost:3306/javaPathDB?autoReconnect=true</url>
+        <usr>usuario</usr>
+        <pwd>pass</pwd>
+    </connection>
+    <connection name="prod">
+        <driver>oracle.jdbc.driver.OracleDriver</driver>
+        <url>jdbc:oracle:thin:@myServer:1521:javaPathDB</url>
+        <usr>tiger</usr>
+        <pwd>scott</pwd>
+    </connection>
+</connectionList>
