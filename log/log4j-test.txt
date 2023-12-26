@@ -1,0 +1,2 @@
+13:28:08.961 [main] ERROR com.ceva.section29.log4j.Log4J2Demo - error message
+13:28:08.966 [main] FATAL com.ceva.section29.log4j.Log4J2Demo - fatal message
