@@ -10,8 +10,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.URLDecoder;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -20,18 +23,18 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 
 /**
- * El server lee el archivo de configuracion WebServer.properties
+ * El servidor procesa una solicitud GET con query strings
  */
-public class WebServer3 {
+public class WebServer4 {
     private static final String CRLF = "\r\n";
     private int serverPort;
     private int serverMaxConnections;
-    private File rootFolder; // directorio a partir de donde se lee todos los archivos
+    private File rootFolder;
     private ServerSocket serverSocket;
     private boolean finished = true;
     private Thread shutdownHook;
 
-    public WebServer3() {
+    public WebServer4() {
         loadParams();
     }
 
@@ -42,15 +45,12 @@ public class WebServer3 {
     }
 
     private void loadParams() {
-        // obtenemos el archivo de propiedades
         File fileParams = new File(System.getProperty("user.home"), "WebServer.props");
-        // si existe lo procesamos
         if (fileParams.exists()) {
-            // cargamos la configuracion del archivo
             Properties props = new Properties();
             try (BufferedInputStream bin = new BufferedInputStream(new FileInputStream(fileParams))) {
                 props.loadFromXML(bin);
-                // leemos las propiedades del archivo
+
                 String s = props.getProperty("port");
                 serverPort = Integer.parseInt(s);
                 s = props.getProperty("maxConnections");
@@ -61,12 +61,10 @@ public class WebServer3 {
                 else
                     rootFolder = null;
             } catch (IOException e) {
-                // si se produce un error lo reportamos y colocamos los valores por defecto al archivo
                 reportException(e);
                 setDefaultParams();
             }
         } else {
-            // si no existe, creamos uno
             setDefaultParams();
 
             Properties props = new Properties();
@@ -130,25 +128,57 @@ public class WebServer3 {
         }
     }
 
+    // procesamos el query string: name=uno&qty=dos
+    private Map<String,String> parseQueryString(String queryString) {
+        Map<String,String> res = new HashMap<>();
+        StringTokenizer st = new StringTokenizer(queryString, "&");
+        while (st.hasMoreTokens()) {
+            String nameValue = st.nextToken();
+            int idx = nameValue.indexOf('=');
+            String name = nameValue.substring(0, idx);
+            String value = nameValue.substring(idx+1);
+            try {
+                value = URLDecoder.decode(value, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                reportException(e);
+            }
+            res.put(name, value);
+        }
+        return res;
+    }
+
     private void processRequest(Socket client) {
         try {
             String method = null;
             String path = null;
+            String queryString = null;
             String protocol = null;
+            Map<String,String> queryStringMap = null;
 
             // Entrada
             BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
             // Leer solicitud
             String line = in.readLine();
-            // si no hay la primera linea, se cancela
             if ((line == null) || (line.length() == 0))
                 return;
             System.out.println(line);
-            // como hay primera linea, la interpretamos
             StringTokenizer st = new StringTokenizer(line, " " );
-            // interpretamos la primera linea
-            method = st.nextToken();
+            method = st.nextToken().toUpperCase(); // obtenemos tipo de request (GET)
+
+            // consideramos que el path puede contener un querystring como:
+            // /index.html?name=uno&qty+dos
             path = st.nextToken();
+            int idx = path.indexOf("?");
+            // si idx es mayor a 0 entonces hay un query string
+            if (idx > 0) {
+                // obtenemos el substring a partir de idx+1
+                queryString = path.substring(idx+1);
+                // el path sera desde posicion 0 hasta la posicion de idx
+                path = path.substring(0, idx);
+
+                if (queryString.length() > 0)
+                    queryStringMap = parseQueryString(queryString);
+            }
             protocol = st.nextToken();
 
             // Leer headers
@@ -159,18 +189,15 @@ public class WebServer3 {
                 String name = line.substring(0, index).trim();
                 String value = line.substring(index+1).trim();
                 // ... Guardar name, value en algun lugar para su posterior consulta
-                line = in.readLine(); // obtenemos la sgte linea
+                line = in.readLine();
             }
 
-            // obtenemo el recurso a leer del servidor
             File resourceFile = null;
             long contentLength = 0;
-            // la informacion del server se enviara por chunks o content lenght
             boolean chunked = false;
             InputStream resource = null;
             if (rootFolder != null) {
                 if (path.equals("/")) {
-                    // leemos el recurso index.html
                     resourceFile = new File(rootFolder, "index.html");
                 } else {
                     if (path.startsWith("/"))
@@ -178,14 +205,12 @@ public class WebServer3 {
                     resourceFile = new File(rootFolder, path);
                 }
                 if ((resourceFile != null) && resourceFile.exists()) {
-                    contentLength = resourceFile.length(); // obtenemos la longitud
+                    contentLength = resourceFile.length();
                     resource = new BufferedInputStream(new FileInputStream(resourceFile));
-                    // validamos si el archivo supera los 8kb
                     if (contentLength > 0x2000)
                         chunked = true;
                 }
             } else {
-                // si no se encuentra el recurso, informamos al usuario
                 resource = new BufferedInputStream(getClass().getResourceAsStream("/com/ceva/section30/serverweb/help.html"));
                 chunked = true;
             }
@@ -194,15 +219,14 @@ public class WebServer3 {
             OutputStream out = new BufferedOutputStream(client.getOutputStream());
             String strResponse;
             if (resource != null) {
-                // armamos la respuesta al client
                 strResponse = "HTTP/1.1 200 OK" + CRLF;
                 out.write(strResponse.getBytes());
+                // retornamos los headers
                 Map<String,String> headers = new LinkedHashMap<>();
                 if (path.toLowerCase().endsWith(".html") || path.equals("/"))
                     headers.put("Content-Type", "text/html");
                 else if (path.toLowerCase().endsWith(".png"))
                     headers.put("Content-Type", "image/png");
-                // establecemos el Transfer-Encoding
                 if (chunked) {
                     headers.put("Transfer-Encoding", "chunked");
                 } else {
@@ -211,32 +235,25 @@ public class WebServer3 {
                 printHeaders(out, headers);
                 out.write(CRLF.getBytes());
 
-                byte buffer[] = new byte[0x2000];
-                // si el Tranfer-Encoding es chunked
-                if (chunked) {
-                    int nRead = resource.read(buffer); // creamos el buffer
-                    while (nRead != -1) {
-                        // leermos el bufer
-                        // escribimos el tamano del chunk
-                        out.write((Integer.toHexString(nRead) + CRLF).getBytes());
-                        // escribimos los datos
-                        out.write(buffer, 0, nRead);
-                        // cambiamos de linea
+                // cuando venga el method HEAD esta porcion de codigo no se ejecutara
+                if ("GET".equals(method)) {
+                    byte buffer[] = new byte[0x2000];
+                    if (chunked) {
+                        int nRead = resource.read(buffer);
+                        while (nRead != -1) {
+                            out.write((Integer.toHexString(nRead) + CRLF).getBytes());
+                            out.write(buffer, 0, nRead);
+                            out.write(CRLF.getBytes());
+                            nRead = resource.read(buffer);
+                        }
+                        out.write((("0" + CRLF).getBytes()));
                         out.write(CRLF.getBytes());
-                        // leemos el sgte bloque
-                        nRead = resource.read(buffer);
-                    }
-                    // escribimos el ultimo bloque de 0 byte
-                    out.write((("0" + CRLF).getBytes()));
-                    // ultimo cambio de linea
-                    out.write(CRLF.getBytes());
-                }
-                // cuando Tranfer-Econding no es chunked
-                else {
-                    int nRead = resource.read(buffer);
-                    while (nRead != -1) {
-                        out.write(buffer, 0, nRead);
-                        nRead = resource.read(buffer);
+                    } else {
+                        int nRead = resource.read(buffer);
+                        while (nRead != -1) {
+                            out.write(buffer, 0, nRead);
+                            nRead = resource.read(buffer);
+                        }
                     }
                 }
                 resource.close();
@@ -279,10 +296,11 @@ public class WebServer3 {
     }
 
     public static void main(String[] args) {
-        System.out.println("WebServer v0.3 - Escrito por Carlos V.");
-        System.out.println("user.home = " + System.getProperty("user.home"));
+        System.out.println("WebServer v0.4 - Escrito por Carlos V..");
+        System.out.println("user.home   = " + System.getProperty("user.home"));
 
-        WebServer3 server = new WebServer3();
+        WebServer4 server = new WebServer4();
+        System.out.println("root folder = " + server.rootFolder);
         server.start();
     }
 }
