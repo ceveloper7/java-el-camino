@@ -20,6 +20,7 @@ public class ParseInt3Test {
 
     @Parameterized.Parameters
     public static Collection<String> getTestValues() {
+        // simulamos que el usuario escribe 20 enter, 0 enter, enter enter, -1 0
         return Arrays.asList(
                 "20\n0\n",
                 "\n\n",
@@ -31,7 +32,10 @@ public class ParseInt3Test {
     public void testInput() throws IOException {
         Main main = new Main();
 
+        // convertimos la cadena strInput a un array de bytes, el resultado sera un
+        // iNputStream que estara en memoria
         ByteArrayInputStream bin = new ByteArrayInputStream(strInput.getBytes());
+        // pasamos el InputStream y simulamos que el user esta escribiendo 3 valores
         main.start(bin);
     }
 
