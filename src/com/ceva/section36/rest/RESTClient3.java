@@ -37,7 +37,7 @@ public class RESTClient3 extends JPanel {
 
     public RESTClient3() {
         super();
-        model = new RESTClient3Model("http://localhost:8080/SimpleStore-Restfull/product");
+        model = new RESTClient3Model("http://localhost:8080/SimpleStore-Restfull");
         initComponents();
     }
 
@@ -85,6 +85,11 @@ public class RESTClient3 extends JPanel {
         }
     }
 
+    /**
+     * Tarea pendiente: antes de editar un registro hay que verificar que dicho registro
+     *                  existe en el servidor. Se puede dar el caso de que un producto
+     *                  se elimine en el servidor pero aun se visualice en el cliente
+     */
     private void editRow() {
         // obtenemos la fila seleccionada
         int row = table.getSelectedRow();

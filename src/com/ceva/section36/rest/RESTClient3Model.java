@@ -221,6 +221,9 @@ public class RESTClient3Model {
                 result = null;
             }
 
+            // hacemos parse del resultado. Leemos el sgte codigo del serve
+            // response.getOutputStream().println("{\"result\":\"success\",\"id_product\":" + id_product + "}");
+            // obtenemos el id_product
             if (result != null) {
                 int id_product = -1;
                 JsonParser parser = Json.createParser(new StringReader(result));
@@ -246,8 +249,10 @@ public class RESTClient3Model {
                     p.name = name;
                     p.price = price;
                     p.description = description;
+                    // obtenemos la fila en la que sera insertado el registro
                     int row = add(p);
 
+                    // reportamos que se inserto un renglon
                     for (RESTClient3ModelListener listener : listeners) {
                         listener.dataInserted(p, row);
                     }
@@ -259,6 +264,7 @@ public class RESTClient3Model {
     public void updateData(int id_product, String name, double price, String description) {
         addWork(() -> {
             JsonBuilderFactory factory = Json.createBuilderFactory(null);
+            // construimos el json
             JsonObject json = factory.createObjectBuilder()
                     .add("id_product", id_product)
                     .add("name", name)
@@ -266,6 +272,7 @@ public class RESTClient3Model {
                     .add("description", description)
                     .build();
 
+            // enviamos el json
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(basePath + "/product/" + id_product))
                     .POST(HttpRequest.BodyPublishers.ofString(json.toString()))
@@ -276,16 +283,19 @@ public class RESTClient3Model {
                 if ((response.statusCode() / 100) == 2) { // 2xx OK
                     int row = 0;
                     for (ProductData p : data) {
+                        // actualizamos los datos dle product
                         if (p.id_product == id_product) {
                             p.name = name;
                             p.description = description;
                             p.price = price;
 
+                            // volvemos a dibujar la UI
                             for (RESTClient3ModelListener listener : listeners) {
                                 listener.dataInserted(p, row);
                             }
                             break;
                         }
+                        // Recorremos la coleccion y vamos incrementando el nro de renglon
                         row++;
                     }
                 } else {

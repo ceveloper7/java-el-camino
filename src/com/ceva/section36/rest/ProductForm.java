@@ -6,6 +6,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Window;
+import java.text.NumberFormat;
+import java.util.Locale;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -55,6 +57,7 @@ public class ProductForm extends JDialog {
         gc.gridy = 1;
         mainPanel.add(label, gc);
         txtPrice = new JTextField(9);
+        txtPrice.setLocale(Locale.US);
         gc.gridx = 1;
         gc.gridy = 1;
         mainPanel.add(txtPrice, gc);
@@ -94,7 +97,7 @@ public class ProductForm extends JDialog {
     public void setData(int id_product, String name, double price, String description) {
         this.id_product = id_product;
         txtName.setText(name);
-        txtPrice.setText(String.format("%.2f", price));
+        txtPrice.setText(String.format(Locale.US,"%.2f", price));
         txtDescription.setText(description);
     }
 
@@ -111,7 +114,8 @@ public class ProductForm extends JDialog {
     }
 
     public double getPrice() {
-        double d = Double.parseDouble(txtPrice.getText());
+        NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
+        double d = Double.parseDouble(nf.format(Double.parseDouble(txtPrice.getText())));
         return d;
     }
 
