@@ -10,8 +10,8 @@ import java.net.URL;
  */
 public class RESTClient {
     public static void main(String[] args) throws Exception {
-        URL url = new URL("http://localhost:8080/SimpleStore-Restfull/product");
-        //URL url = new URL("http://localhost:8080/SimpleStore-Restfull/rest/product/14");
+        //URL url = new URL("http://localhost:8080/SimpleStore-Restfull/product");
+        URL url = new URL("http://localhost:8080/SimpleStore-RestJaxRs/rest/product");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestProperty("accept", "application/json");
         BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));

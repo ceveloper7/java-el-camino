@@ -37,7 +37,7 @@ public class RESTClient3 extends JPanel {
 
     public RESTClient3() {
         super();
-        model = new RESTClient3Model("http://localhost:8080/SimpleStore-Restfull");
+        model = new RESTClient3Model("http://localhost:8080/SimpleStore-RestJaxRs/rest");
         initComponents();
     }
 
