@@ -2,8 +2,8 @@ package com.ceva.section1;
 
 public class Condicionales {
     private static void calificar(int nota){
-        if(nota < 0 || nota > 20){
-            System.out.println("La nota no puede ser menos a 0 o mayor a 20");
+        if(nota < 0 || nota >= 20){
+            System.out.println("La nota no puede ser menor a 0 o mayor a 20");
         }else if(nota <= 5){
             System.out.println("Su calificion es D");
         }else if(nota <= 10){
@@ -42,7 +42,7 @@ public class Condicionales {
         }
     }
     public static void main(String[] args) {
-        numeroMayor(2569,354635,1587,3658);
+        numeroMayor(9,2,8,1);
         //calificar(7);
     }
 }
