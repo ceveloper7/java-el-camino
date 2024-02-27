@@ -25,4 +25,26 @@ public class Utils {
             return -result;
         return result;
     }
+
+    public void convertDecimalToBinary(int value){
+        if((value <= 0))
+            return;
+        boolean isZero = false;
+        StringBuilder binary = new StringBuilder();
+        int cosciente = value/2;
+        binary.append(value%2);
+
+        do{
+            binary.append(cosciente%2);
+            cosciente = cosciente / 2;
+            if(cosciente == 0){
+                isZero = true;
+            }
+        }
+        while (!isZero);
+
+        System.out.println(binary.reverse());
+    }
+
+
 }

@@ -5,5 +5,7 @@ public class DemoUtils {
         Utils util = new Utils();
         int r = util.convertStringToInteger("-20");
         System.out.println(r);
+
+        util.convertDecimalToBinary(7);
     }
 }
