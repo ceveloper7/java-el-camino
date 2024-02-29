@@ -1,11 +1,13 @@
 package com.ceva.utils;
 
+import java.util.Date;
+
 public class DemoUtils {
     public static void main(String[] args) {
-        Utils util = new Utils();
-        int r = util.convertStringToInteger("-20");
-        System.out.println(r);
+        System.out.println(Util.convertStringToInteger("-20"));
+        Util.convertDecimalToBinary(2);
 
-        util.convertDecimalToBinary(7);
+        Date today = Util.convertStringToDate("29/02/2024");
+        System.out.println("El dia de hoy es: " + today);
     }
 }

@@ -1,10 +1,10 @@
 package com.ceva.utils.textgraphics;
 
-public class TextGrpah1 {
+public class TextGraph2 {
     // espacio en memoria donde generamos el dibujo
     private char[][] canvas;
 
-    public  TextGrpah1(int cols, int rows){
+    public TextGraph2(int cols, int rows){
         canvas = new char[rows][cols];
         clearCanvas();
     }
@@ -61,6 +61,16 @@ public class TextGrpah1 {
         setCharAt(x+width, y+height, '+');
     }
 
+    // retornamos la longitud del canvas
+    public int getWidth(){
+        return canvas[0].length;
+    }
+
+    // retornamos el alto del canvas
+    public int getHeight(){
+        return canvas.length;
+    }
+
     public void println(){
         for(int row = 0; row < canvas.length; row++){
             System.out.println(canvas[row]);
@@ -69,18 +79,19 @@ public class TextGrpah1 {
     }
 
     public static void main(String[] args) {
-        TextGrpah1 graph = new TextGrpah1(80, 25);
-        graph.drawRectangle(0, 0, 79, 24);
-        for(int x = 0; x < 80; x++){
+        TextGraph2 graph = new TextGraph2(100, 15);
+        graph.drawRectangle(0, 0, graph.getWidth()-1, graph.getHeight()-1);
+        for(int x = 0; x < graph.getWidth(); x++){
             /**
              * Valor a dibujar
              * La funcion seno retorna un valor que corresponde a la coordenada y
              * de un punto que se encuentra en un angulo especifico, en un circulo unitario
              * Un circulo tiene 360 grados
              */
-            double value = Math.sin(Math.toRadians((2*360.0/80) * x));
-            value = value * 10;
-            graph.setCharAt(x, (int)(12-value), 'x');
+            double value = Math.sin(Math.toRadians((2*360.0/ graph.getWidth()) * x));
+            // evitamos que la grafica toque el limite superior
+            value = value * ((graph.getHeight()/2)-2);
+            graph.setCharAt(x, (int)(graph.getHeight()/2-value), '*');
         }
 
         graph.println();
