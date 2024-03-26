@@ -1,6 +1,6 @@
 package com.ceva.utils.dateconvert;
 
-import java.util.StringTokenizer;
+
 
 public class DateConvert {
     private final char SEPARATOR = '/';
@@ -8,33 +8,57 @@ public class DateConvert {
 
     public DateConvert() {
         mapa = new String[6];
-        mapa[0] = "";
-        mapa[1] = "";
-        mapa[2] = "";
-        mapa[3] = "";
-        mapa[4] = "";
-        mapa[5] = "";
+        mapa[0] = "dd";
+        mapa[1] = "mm";
+        mapa[2] = "yy";
+        mapa[3] = "hh";
+        mapa[4] = "MM";
+        mapa[5] = "ss";
     }
 
-    private void formatAnalyzer(String formatDate){
-        if((formatDate.isBlank()) || (formatDate.isEmpty()))
-            System.out.println("Error: debe ingresar un formato");
-        StringTokenizer st = new StringTokenizer(formatDate, "/");
-
-        if((st.countTokens() == 1))
-            System.out.println("Error - Debe usar / como separador de dia, mes, año");
-
-        while (st.hasMoreTokens()){
-            String v = st.nextToken();
-            for(int i = 0; i < v.length(); i++){
-                char letra = v.charAt(i);
-                System.out.println(letra);
+    private void formatAnalyzer(String date, String formatDate) {
+        if((date.isEmpty()) || (formatDate.isEmpty()))
+            System.exit(0);
+        int fmtSize = formatDate.length();
+        int endIdx = -1;
+        int count = 0;
+        while (++endIdx < fmtSize){
+            char letter = formatDate.charAt(endIdx);
+            switch (letter){
+                case 'd':
+                    for(int l = 0; l < mapa[endIdx].length(); l++){
+                        if(mapa[endIdx].contains(String.valueOf(letter))){
+                            count++;
+                        }
+                    }
+                    System.out.println("numero de d " + count);
+                    count = 0;
+                    break;
+                case 'm':
+                    for(int l = 0; l < mapa[l].length(); l++){
+                        if(mapa[l].contains(String.valueOf(letter))){
+                            count++;
+                        }
+                    }
+                    System.out.println("numero de m " + count);
+                    count = 0;
+                    break;
+                case 'y':
+                    for(int l = 0; l < mapa[l].length(); l++){
+                        if(mapa[l].contains(String.valueOf(letter))){
+                            count++;
+                        }
+                    }
+                    System.out.println("numero de y " + count);
+                    count = 0;
+                    break;
             }
+
         }
     }
 
     public static void main(String[] args) {
-        DateConvert dc = new DateConvert();
-        dc.formatAnalyzer("dd/mm/yyyy");
+        DateConvert dt =  new DateConvert();
+        dt.formatAnalyzer("06/03/2024", "mm/dd/yyyy");
     }
 }
