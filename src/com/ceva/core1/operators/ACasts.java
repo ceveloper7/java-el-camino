@@ -31,7 +31,7 @@ public class ACasts {
         };
         System.out.println(seasonName);
 
-        String role = "Custom";
+        String role = "User";
         int roleId = switch (role){
             case "Admin", "Administrator", "Administrador" -> 0;
             case "User" -> 1;
