@@ -1,7 +1,5 @@
 package com.ceva.section5.poo;
 
-import edu.princeton.cs.algs4.CC;
-
 public class CCircle extends BPoint{
     private double radius;
 
