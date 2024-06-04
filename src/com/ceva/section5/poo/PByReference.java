@@ -16,7 +16,7 @@ public class PByReference {
     }
 
     public static void main(String[] args) {
-        byRef1();
+        byRef1();// 101
         PByReference a = new PByReference();
         a.field = 100;
         byRef2(a);
