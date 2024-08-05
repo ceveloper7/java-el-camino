@@ -89,8 +89,9 @@ public class HCollections {
         /**
          * Implementacion de Set
          * HashSet -> guarda sus elementos utilizando una tabla basada en el hashcode de cada objeto. Esta implementacion es eficiente para encontrar
-         *            elementos y muy eficiente para encontrarlos aleatoriamente. Su desventaja es que cuando su tabla interna se llena es
-         *            necesario expandirla y volver a acomadar todos sus elementos
+         *            elementos y muy eficiente para buscar aleatoriamente un elemento. Su desventaja es que cuando su tabla interna se llena es
+         *            necesario expandirla y volver a acomadar todos sus elementos.
+         *            Si nos lo que nos importa es mantener los datos pero no importa el orden, entonces, hashset es una buena opcion.
          */
         Set set = new HashSet();
         set.add("uno");
@@ -110,7 +111,8 @@ public class HCollections {
         /**
          * Implementacion de Set
          * LinkedHashSet -> Parecida a HashSet pero ademas de guardar sus elementos en una tabla hash tambien los guarda en una lista enlazada.
-         *                  por lo que puede recorrerlos en el mismo orden que fueron agregados a la coleccion
+         *                  por lo que puede recorrerlos en el mismo orden que fueron agregados a la coleccion.
+         *                  Si el orden de los elementos en una lista son importantes entonces LinkedHashSet es una buena opcion.
          */
         Set set = new LinkedHashSet();
         set.add("uno");
@@ -230,7 +232,8 @@ public class HCollections {
             System.out.println(map.get(n));
 
         System.out.println();
-        // Recorrer indices del diccionario
+        // Recorrer indices del diccionario. keySet() retorna un Set que apunta a todos los indices de map
+        // entrySet() retorna un Set donde cada elemento contiene tanto el key y value del map.
         for (Iterator it=map.keySet().iterator(); it.hasNext(); ) {
             System.out.println(it.next());
         }
@@ -238,16 +241,17 @@ public class HCollections {
         System.out.println("Recorremos indice-valor del Map");
         // Recorrer pares indice-valor del diccionario. .entrySet() retorna un Set donde cada elemento contiene tanto el indice como el valor
         for (Iterator it=map.entrySet().iterator(); it.hasNext(); ) {
+            // recorremos los entries
             Map.Entry entry = (Map.Entry) it.next();
             // este metodo es mas eficiente ya que con Entry podemos acceder al key y al value
-            System.out.println("key: " + entry.getKey() + ", value=" + entry.getValue());
+            System.out.println("key: " + entry.getKey() + ", value=" + entry.getValue()); // print: key 1, value=uno
         }
 
         System.out.println("Recorremos solo valores del Map");
         // Recorrer indices del diccionario. .keySet() retorna un Set que apunta a todos los indices del Map
         for (Iterator it=map.keySet().iterator(); it.hasNext(); ) {
             // .it.next() retorna el indice y map.get() retorna el valor del indice
-            System.out.println(map.get(it.next()));
+            System.out.println(map.get(it.next())); // esta busqueda es menos eficiente por lo que map.entrySet() es recomendable.
         }
     }
 

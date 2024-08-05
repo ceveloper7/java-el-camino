@@ -300,7 +300,7 @@ public class CatalogDemo2 extends JPanel {
             if (form.okWasSelected()) {
                 model.updateData(d.id_company, form.getSymbol(), form.getName(), form.getId_companyStatus());
             }
-        }
+        } 
     }
 
     private void initComponents() {

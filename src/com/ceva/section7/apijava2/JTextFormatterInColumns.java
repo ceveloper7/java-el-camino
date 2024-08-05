@@ -12,13 +12,13 @@ import java.util.StringTokenizer;
  * escribiendo el texto. En lugar de imprimir en pantalla cada palabra hasta completar la linea empleamos una coleccion y agregamos
  * en ella las lineas de texto para al final imprimir el texto de la coleccion y formatear la salida.
  */
-public class JTextFormatterInNColumns {
+public class JTextFormatterInColumns {
     private static String getData()throws IOException{
         StringBuilder str = new StringBuilder();
 
         try(
                 BufferedReader br = new BufferedReader(
-                        new InputStreamReader(JTextFormatterInNColumns.class.getResourceAsStream("resources/magna-carta.txt")))
+                        new InputStreamReader(JTextFormatterInColumns.class.getResourceAsStream("resources/magna-carta.txt")))
         ){
             String line = br.readLine();
             while(line != null){
@@ -124,22 +124,26 @@ public class JTextFormatterInNColumns {
 // impresion rows en renglones
         for (int n=0; n<rows; n++) {
             curLine.setLength(0);
+            // Process
             int col = 0; // # columna
             // mientras el #columnas sea menor al # de columnas a imprimir
             while (col < columns) {
-                // validamos que no se exceda
+                // validamos que no se exceda el nro de lineas
                 if ((rows*col + n) < lines.size()) {
                     // 1 iteracion -> row*0+0
                     // 2 iteracion -> row*1+0
                     // 3 iteracion -> row*2+0
                     curLine.append(lines.get(rows*col + n));
+                    // validacion para la primera y segunda columna
                     if (col < (columns-1)) {
+                        // una vez agregada la linea completamos con espacios para hasta alcanzar a la siguiente linea
                         while (curLine.length() < (lineWidth + 4)*(col+1))
                             curLine.append(" ");
                     }
                 }
                 col++; // incremento columna
             }
+            // Process end
             System.out.println(curLine.toString());
         }
 // fin impresion rows
