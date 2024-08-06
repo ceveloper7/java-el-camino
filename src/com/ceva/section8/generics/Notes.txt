@@ -1,0 +1,40 @@
+Genericos y Herencia
+====================
+Dados dos tipos A y B, MyClas<A> y MyClass<B> no tienen relacion entre ellos, no importa que A y B esten relacionados. EL ancestro comun a
+MyClass<A> y MyClass<B> es Object.
+
+Genericos y SUbtipos
+====================
+Se puede crear un subtipo de una clase generica extendiendolo o implementandolo. La relacion entre el parametro de tipo de una clase
+o interface y los parametros de tipos de otra estan determinados por extends e implements
+Por ejemplo:
+ArrayList<E> implements a List<E>
+List<E> extends a Collection<E>
+
+asi que:
+ArrayList<String> es un subtipo de List<String>
+List<String> es un subtipo a Collection<String>
+Por ejemplo:
+interface PayLoadList<E,P> entends List<E>{
+    void setPayLoad(int index, P val)
+}
+
+PayLoadList<String, String>
+PayLoadList<String, Integer>
+PayLoadList<String, Boolean>
+
+Deduccion o Inferencia de Tipos
+===============================
+EL compilador basado en la invocacion y declaracion del metodo determinar los argumentos de tipos que lo hacen valido. Ejemplo
+Funcion que busca a un elemento T en una coleccion
+public static <T> T find(T t, List<T> findCollection){
+    for(T e : findCollection){
+        if(e.equals(t))
+            return e;
+    }
+    return null;
+}
+Modos de invocacion de la funcion find:
+List<Double> list = new ArrayList<>();
+Double d = TestCLass.<Double>find(5d, list);
+var b = find(20, new ArrayList<>());
