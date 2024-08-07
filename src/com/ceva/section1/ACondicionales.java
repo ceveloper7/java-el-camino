@@ -1,6 +1,7 @@
 package com.ceva.section1;
 
-public class Condicionales {
+public class ACondicionales {
+    // if-else anidado
     private static void calificar(int nota){
         if(nota < 0 || nota >= 20){
             System.out.println("La nota no puede ser menor a 0 o mayor a 20");
@@ -15,6 +16,27 @@ public class Condicionales {
         }else{
             System.out.println("Su calificacion es A+.. Excelente!");
         }
+    }
+
+    private static void studentGrade(int studentGrade){
+        if(studentGrade >= 90){
+            System.out.println("A");
+        }else if(studentGrade >= 80){
+            System.out.println("B");
+        }else if(studentGrade >= 70){
+            System.out.println("C");
+        }else if(studentGrade >= 60){
+            System.out.println("D");
+        }else{
+            System.out.println("F");
+        }
+    }
+
+    private static void studentGradeTernaryOperator(int studentGrade){
+        System.out.println(studentGrade>= 90 ? "A"
+                : studentGrade>= 80 ? "B"
+                : studentGrade >= 70 ? "C"
+                : studentGrade >= 60 ? "D" : "F");
     }
 
     // 9 2 8 1
@@ -42,7 +64,8 @@ public class Condicionales {
         }
     }
     public static void main(String[] args) {
-        numeroMayor(9,2,8,1);
+        studentGrade(75);
+        //numeroMayor(9,2,8,1);
         //calificar(7);
     }
 }
