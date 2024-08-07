@@ -11,14 +11,17 @@ public class BCounterControlledIteration {
     private int average;
 
     public BCounterControlledIteration() {
-        this.gradeCounter = 1;
+        this.gradeCounter = 0;
         this.total = 0;
         this.average = 0;
     }
 
+    /**
+     * Formulacion de Algoritmo: Iteracion controlada por un contador
+     */
     private void processData()throws IOException {
         try(BufferedReader br = new BufferedReader(new InputStreamReader(System.in));){
-            while(gradeCounter <= 10){
+            while(gradeCounter < 10){
                 System.out.println("Enter grade number: ");
                 int grade = Integer.parseInt(br.readLine());
                 this.total = this.total + grade;
