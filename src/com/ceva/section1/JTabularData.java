@@ -1,5 +1,5 @@
 package com.ceva.section1;
-
+// 3.22
 public class JTabularData {
     private void printTabularData(){
         int[][] tab = new int[5][3];
