@@ -8,6 +8,9 @@ public class Util {
     public static boolean isDigit(char ch){
         return (ch >= '0') && (ch <= '9');
     }
+    public static boolean isDigit(String str){
+        return str.matches("[0-9]{1,13}(\\.[0-9]*)?");
+    }
     public static Date convertStringToDate(String strDate){
         int day, month, year;
 
