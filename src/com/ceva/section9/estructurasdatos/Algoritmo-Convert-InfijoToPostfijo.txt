@@ -1,0 +1,12 @@
+Algortimo para convertir de infijo a postfijo:
+
+0. Obtener todos los elementos de la expresion.
+1. Si el elemento es un parentesis abierto, guardarlo en el stack.
+2. Si el elemento es un numero, agregarlo al resultado de la conversion.
+3. Si el elemento es un operador entonces:
+    3.1 Reviso el ultimo elemento en el stack, si es un operador (+,-,*,/), entonces hago pop hasta que la prioridad de este sea menor
+        o igual que el operador que estoy evaluando o me encuentre un parentesis.
+    3.2 Guardo el elemento en el stack.
+4. Si el elemento es una parentesis cerrado, hago pop al stack y lo agrego al resultado hasta que encuentre un parentesis abierto
+  o se vacie el stack.
+5. Si se terminan los elementos, vacio lo que quede del stack agregandolo al resultado
