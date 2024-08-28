@@ -62,22 +62,23 @@ public class JInFixToPostFix {
         // 0. Obtener los elementos d la expresion
         StringTokenizer st = new StringTokenizer(expr, " ");
         while (st.hasMoreTokens()) {
+            // obtenemos el token
             String s = st.nextToken();
             // 1. Validamos si se trata de un parentesis abrierto
             if ("(".equals(s)) {
                 // 1. Lo guardamos en el stack
                 stack.push(s);
             }
-            // 2. Validamos que el elemento sea un numero
+            // 2. Validamos si el token es un numero
             else if (isNumber(s)) {
-                // 2. Agregamos el element a la respuesta
+                // 2. si es un numero, agregamos el token al resultado
                 spaceAppend(res, s);
             }
-            // 3. validamos is se trata de un operador aritmetico
+            // 3. validamos si el token es un operador artimetico
             else if (isOperator(s)) {
                 // validamos que haya elementos en el stack
                 if (stack.size() > 0) {
-                    // 3.1 obtenemos el ultimo elemento que hicimos push en el stack
+                    // 3.1 obtenemos el ultimo elemento en el stack
                     String peek = stack.peek();
                     // mientas haya elementos en el stack
                     // mientras sea un operador el ultimo elemento en el stack
@@ -86,13 +87,13 @@ public class JInFixToPostFix {
                     while ((stack.size() > 0) && isOperator(peek) &&
                             (operatorPrecedence(peek) >= operatorPrecedence(s)) && !"(".equals(peek)
                     ) {
-                        // agregamos el elemento a la respuesta
+                        // agregamos peek al resultado
                         spaceAppend(res, peek);
                         // pop al stack
                         peek = stack.pop();
                     }
                 }
-                // 3.2 guardamos el elemento encontrado en el stack
+                // 3.2 guardamos en el stack el token encontrado
                 stack.push(s);
             }
             // 4.
@@ -117,7 +118,8 @@ public class JInFixToPostFix {
 
     public static void main(String[] args) {
         JInFixToPostFix cvt = new JInFixToPostFix();
-        String result = cvt.toPostFix("( 1 + 2 * ( 5 + 6 ) ) * ( 3 + 4 )");
+        String result = cvt.toPostFix("1 - 2 + 3");
+        //String result = cvt.toPostFix("( 1 + 2 * ( 5 + 6 ) ) * ( 3 + 4 )");
         System.out.println(result);
 
         IPostFixCalculator calc = new IPostFixCalculator();
