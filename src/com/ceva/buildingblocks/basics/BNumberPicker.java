@@ -1,7 +1,7 @@
-package com.ceva.buildingblocks.one;
+package com.ceva.buildingblocks.basics;
 
 import java.util.Random;
-import java.util.Random.*;
+
 /**
  * Declarando imports
  * 1. * no significa que ingresara a las subcarpetas en el paquete Random para buscar la clase, * significa que solo buscara la clase

@@ -1,6 +1,6 @@
-package com.ceva.buildingblocks.one.packageb;
+package com.ceva.buildingblocks.basics.packageb;
 
-import com.ceva.buildingblocks.one.packagea.ClassA;
+import com.ceva.buildingblocks.basics.packagea.ClassA;
 
 public class ClassB {
     public static void main(String[] args) {
