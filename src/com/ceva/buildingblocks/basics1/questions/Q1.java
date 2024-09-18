@@ -1,4 +1,4 @@
-package com.ceva.buildingblocks.basics.questions;
+package com.ceva.buildingblocks.basics1.questions;
 
 public class Q1 {
     // Legal entry point main method

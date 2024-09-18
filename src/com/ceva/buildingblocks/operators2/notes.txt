@@ -1,0 +1,79 @@
+OPERATORS
+=========
+
+Tipos de operadores
+===================
+Unary
+Binary
+Ternary
+
+Precedencia de los operadores
+=============================
+
+1. hay que hacer los Post unary operator var++, luego los pre unary operator ++var, si hay mas de uno se realizan de izq a der
+2. los unary operator como casting de primitivos, negacion, positivo, negativo y se realizan de der a izq
+3. las operaciones Casting de variables de referencia y se realizan de der a izq
+4. las operaciones de multiplicacion, division, modulo o residuo y se realizan de izq a der
+5. la suma y resta y se realizan de izq a der
+6. los shift operator << >> >>> y se realizan de izq a der
+7. operadores relacionales <, >, <=, >=, instanceof y se realizan de izq a der
+8. Operadores igualdad/no igualdad ==, != y se realizan de iz a der
+9. Logical &
+10. Logical exclusive OR ^
+11. Logical inclusive OR |
+12. Condicional AND &&
+13. Condicional OR ||
+14. Ternary operators boolean expression ? expression1 : expression2 de izq a der
+15. operadores de asignacion =, +=, -=, *=, /= ...
+
+Casos que no compilan
+=====================
+
+// imposible negar un numero
+int a = !5;
+
+// imposible un negativo de un boolean
+boolean b = -true;
+
+// imposible asignar un entero a un boolean o negacion de entero
+boolean c = 0;
+boolean d = !0;
+
+Operadores de increment y decremento
+====================================
+
+Pre-incremento: ++w     incr. value en 1 y retorna nuevo value
+Pre-decremento: --w     decr. value en 1 y retorna nuevo value
+
+** post increment y decrement tienen mayor precedencia que los pre incr y decr
+post-increment: w++     incr. value en 1 y retorna valor original
+post-decrement: z--     decr. value en 1 y retorna valor original
+
+Promocion NUmerica
+==================
+1.
+Si dos valores tienen diferente tipo de datos, java automaticamente promovera uno de los valores al tipo
+de mayor jerarquia. ejemplo val1 es promovido a int y el resultado sera de tipo int
+short val1 = 3;
+int val2 = 5;
+int r = val1 + val2;
+
+2.
+Si uno de los valores es integer y los otros punto flotante, java automaticamente promueve el valor integer
+al tipo punto flotante. ejemplo. val2 sera promovido al tipo float
+float val1 = 5.0F;
+int val2 = 5;
+
+3.
+los tipos de datos pequenos como byte, short, char, son primero promovidos a int sin importar
+el operador aritmetico, aun si ninguno de los operandos es int. ejemplo. val1 y val2 son promovidos a int, el resultado sera de tipo int
+byte val1 = 1;
+short val2 = 2;
+
+4.
+despues de que la promocion ha ocurrido y los operandos tienen los mismos tipos de dato, el resultado
+tendra el mismo tipo de dato que sus operandos promovidos.
+
+Casting de valores
+==================
+

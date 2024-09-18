@@ -1,4 +1,4 @@
-package com.ceva.buildingblocks.basics;
+package com.ceva.buildingblocks.basics1;
 
 /**
  * var se utiliza unicamente en variable locales.

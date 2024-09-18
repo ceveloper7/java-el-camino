@@ -1,4 +1,4 @@
-package com.ceva.buildingblocks.basics.packagea;
+package com.ceva.buildingblocks.basics1.packagea;
 
 /**
  * Compilando Clases en distintos paquetes: Como se accede a los paquetes en Windows y en Linux son distinto

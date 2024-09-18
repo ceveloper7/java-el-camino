@@ -1,4 +1,4 @@
-package com.ceva.buildingblocks.basics.questions;
+package com.ceva.buildingblocks.basics1.questions;
 
 public class Q2 {
     public static void main(String[] args) {

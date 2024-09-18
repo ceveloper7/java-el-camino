@@ -1,4 +1,4 @@
-package com.ceva.buildingblocks.basics;
+package com.ceva.buildingblocks.basics1;
 
 public class CTtextBlocks {
 
