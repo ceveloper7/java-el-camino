@@ -10,10 +10,11 @@ Ternary
 Precedencia de los operadores
 =============================
 
-1. hay que hacer los Post unary operator var++, luego los pre unary operator ++var, si hay mas de uno se realizan de izq a der
-2. los unary operator como casting de primitivos, negacion, positivo, negativo y se realizan de der a izq
+1. hay que hacer los Post unary operator var++
+   los pre unary operator ++var, si hay mas de uno se realizan de izq a der
+2. los unary operator como casting de primitivos (type), !, +, - y se realizan de der a izq
 3. las operaciones Casting de variables de referencia y se realizan de der a izq
-4. las operaciones de multiplicacion, division, modulo o residuo y se realizan de izq a der
+4. las operaciones de *, /, % o residuo y se realizan de izq a der
 5. la suma y resta y se realizan de izq a der
 6. los shift operator << >> >>> y se realizan de izq a der
 7. operadores relacionales <, >, <=, >=, instanceof y se realizan de izq a der
@@ -25,6 +26,7 @@ Precedencia de los operadores
 13. Condicional OR ||
 14. Ternary operators boolean expression ? expression1 : expression2 de izq a der
 15. operadores de asignacion =, +=, -=, *=, /= ...
+16. arrow operator ->
 
 Casos que no compilan
 =====================

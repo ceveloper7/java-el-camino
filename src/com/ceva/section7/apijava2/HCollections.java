@@ -320,9 +320,9 @@ public class HCollections {
         // linkedHashSetTest();
         // treeSetTest();
         // listTest();
-        // hashMapTest();
+        hashMapTest();
         // treeMapTest();
-        propertiesTest1();
+        //propertiesTest1();
         // propertiesTest2();
     }
 }
