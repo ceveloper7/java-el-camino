@@ -6,13 +6,15 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class ConvertNumberToLetters {
-    StringBuilder sb = new StringBuilder();
+    StringBuilder letras = new StringBuilder();
     StringBuilder token = new StringBuilder();
     private static final int UNIDAD = 1;
     private static final int DECENA = 2;
     private static final int CENTENA = 3;
+    private static final int UNIDAD_DE_MILLAR = 4;
+    private static final int DECENA_DE_MILLAR = 5;
 
-    private String value;
+    private String number;
     private int size;
 
     Map unidades = new HashMap();
@@ -58,15 +60,15 @@ public class ConvertNumberToLetters {
         decenas.put("9", "noventa");
 
         centenas.put("100", "cien");
-        centenas.put("1", "ciento");
-        centenas.put("2", "doscientos");
-        centenas.put("3", "trescientos");
-        centenas.put("4", "cuatrocientos");
-        centenas.put("5", "quinientos");
-        centenas.put("6", "seiscientos");
-        centenas.put("7", "setecientos");
-        centenas.put("8", "ochecientos");
-        centenas.put("9", "novecientos");
+        centenas.put("1", "ciento ");
+        centenas.put("2", "doscientos ");
+        centenas.put("3", "trescientos ");
+        centenas.put("4", "cuatrocientos ");
+        centenas.put("5", "quinientos ");
+        centenas.put("6", "seiscientos ");
+        centenas.put("7", "setecientos ");
+        centenas.put("8", "ochecientos ");
+        centenas.put("9", "novecientos ");
 
     }
 
@@ -102,60 +104,91 @@ public class ConvertNumberToLetters {
             Map.Entry entry = (Map.Entry)o;
             var key = entry.getKey().toString();
             if(key.equals(token)){
-                sb.append(entry.getValue().toString());
+                letras.append(entry.getValue().toString());
                 break;
             }
         }
-        return sb.toString();
+        return letras.toString();
     }
 
     private String getUnidad(){
-        String unidad = "";
-        token.append(value.charAt(value.length()-1));
+        token.append(number.charAt(number.length()-1));
         getItem(unidades, token.toString());
-        return sb.toString();
+        return letras.toString();
     }
 
     private String getDecena(){
-        token.append(value.charAt(UNIDAD - 1));
+        token.append(number.charAt(UNIDAD - 1));
         if("1".contentEquals(token)){
-            token.append(value.charAt(value.length() - 1));
-            getItem(decenas, token.toString());
-            return sb.toString();
+            getItem(decenas, number);
+            return letras.toString();
         }
 
         if("2".contentEquals(token)){
-            token.append(value.charAt(value.length() -1));
+            token.append(number.charAt(number.length() -1));
             if("20".contentEquals(token)){
                 getItem(decenas, token.toString());
             }else{
                 getItem(decenas, String.valueOf(token.charAt(UNIDAD-1)));
-                getItem(unidades, String.valueOf(token.charAt(value.length() - 1)));
+                getItem(unidades, String.valueOf(token.charAt(number.length() - 1)));
             }
-            return sb.toString();
+            return letras.toString();
         }
 
-        token.append(value.charAt(value.length()-1));
+        token.append(number.charAt(number.length()-1));
         if("0".equals(String.valueOf(token.charAt(token.length()-1)))){
             getItem(decenas, String.valueOf(token.charAt(UNIDAD - 1)));
-            return sb.toString();
+            return letras.toString();
         }else{
             getItem(decenas, String.valueOf(token.charAt(UNIDAD - 1)));
-            sb.append(" y ");
-            getItem(unidades, String.valueOf(token.charAt(value.length() - 1)));
+            letras.append(" y ");
+            getItem(unidades, String.valueOf(token.charAt(number.length() - 1)));
         }
 
-        return sb.toString();
+        return letras.toString();
     }
 
     private String getCentena(){
-        token.append(value.charAt(UNIDAD - 1));
+        token.append(number);
+        if("100".contentEquals(token)){
+            getItem(centenas, token.toString());
+            return letras.toString();
+        }
+
+        String pos = token.substring(0,2);
+        if(pos.contains("0")){
+            getItem(centenas, String.valueOf(token.charAt(UNIDAD - 1)));
+            getItem(unidades, String.valueOf(token.charAt(token.length() - 1)));
+            return letras.toString();
+        }
+
+        getItem(centenas, String.valueOf(token.charAt(UNIDAD - 1)));
+        token.setLength(0);
+        number = number.substring(UNIDAD);
+        getDecena();
         
-        return "";
+        return letras.toString();
+    }
+
+    private String getUnidadMillar(){
+        String temp = number;
+
+        if("1000".equals(number)){
+            letras.append("mil");
+            return letras.toString();
+        }
+
+        number = String.valueOf(temp.charAt(UNIDAD - 1));
+        getUnidad();
+        letras.append( " mil ");
+
+        number = temp.substring(UNIDAD);
+        getCentena();
+
+        return letras.toString();
     }
 
     private void convertNumberToLetters(){
-        // unidades
         switch(size){
             case UNIDAD:
                 System.out.println(getUnidad());
@@ -165,6 +198,10 @@ public class ConvertNumberToLetters {
                 break;
             case CENTENA:
                 System.out.println(getCentena());
+                break;
+            case UNIDAD_DE_MILLAR:
+                System.out.println(getUnidadMillar());
+                break;
         }
     }
 
@@ -177,8 +214,8 @@ public class ConvertNumberToLetters {
         if(!rpta){
             System.err.println("--> Numero invalido. ");
         }
-        this.value = input;
-        this.size = this.value.length();
+        this.number = input;
+        this.size = this.number.length();
 
         convertNumberToLetters();
     }
