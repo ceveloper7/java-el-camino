@@ -24,9 +24,6 @@ public class ConvertNumberToLetters {
 
 
     public ConvertNumberToLetters(){
-        periods.put("1000", "mil");
-        periods.put("1_000_000", "millon");
-        periods.put("1_000_000_000_000", "billon");
 
         unidades.put("1", "uno");
         unidades.put("2", "dos");
