@@ -13,6 +13,7 @@ public class ConvertNumberToLetters {
     private static final int CENTENA = 3;
     private static final int UNIDAD_DE_MILLAR = 4;
     private static final int DECENA_DE_MILLAR = 5;
+    private static final int CENTENA_DE_MILLAR = 6;
 
     private String number;
     private int size;
@@ -20,7 +21,6 @@ public class ConvertNumberToLetters {
     Map unidades = new HashMap();
     Map decenas = new HashMap();
     Map centenas = new HashMap();
-    Map periods = new HashMap();
 
 
     public ConvertNumberToLetters(){
@@ -96,7 +96,7 @@ public class ConvertNumberToLetters {
         return true;
     }
 
-    private String getItem(Map mapa, String token){
+    private void getItem(Map mapa, String token){
         for(Object o : mapa.entrySet()){
             Map.Entry entry = (Map.Entry)o;
             var key = entry.getKey().toString();
@@ -105,7 +105,6 @@ public class ConvertNumberToLetters {
                 break;
             }
         }
-        return letras.toString();
     }
 
     private String getUnidad(){
@@ -167,19 +166,123 @@ public class ConvertNumberToLetters {
         return letras.toString();
     }
 
+    //1000
+    /*
+     * 1005
+     *      1000 -> Millar
+     *       000 -> Centena
+     *        00 -> Decena
+     *         5 -> Unidad
+     *
+     * 2020
+     *      2000 -> Millar
+     *       000 -> Centena
+     *        20 -> Decena
+     *         0 -> Unidad
+     *
+     * 3033
+     *      3000 -> Millar
+     *       000 -> Centena
+     *        30 -> Decena
+     *         3 -> Unidad
+     *
+     * 6549
+     *      6000 -> Millar
+     *       500 -> Centena
+     *        40 -> Decena
+     *         9 -> Unidad
+     */
     private String getUnidadMillar(){
-        String temp = number;
+        String tmp = number;
 
-        if("1000".equals(number)){
+        token.append(tmp);
+        if("1000".contentEquals(token)){
             letras.append("mil");
             return letras.toString();
         }
 
-        number = String.valueOf(temp.charAt(UNIDAD - 1));
-        getUnidad();
-        letras.append( " mil ");
+        // millares
+        token.setLength(0);
+        token.append(number.charAt(UNIDAD - 1));
+        number = String.valueOf(tmp.charAt(UNIDAD - 1));
+        if("1".contentEquals(token)){
+            letras.append("mil ");
+        }else{
+            token.setLength(0);
+            getUnidad();
+            letras.append( " mil ");
+        }
 
-        number = temp.substring(UNIDAD);
+        token.setLength(0);
+        token.append(tmp.charAt(UNIDAD));
+        if("0".contentEquals(token)){
+            token.setLength(0);
+            token.append(tmp.charAt(DECENA));
+            if("0".contentEquals(token)){
+                token.setLength(0);
+                number = String.valueOf(tmp.charAt(tmp.length()-1));
+                getUnidad();
+            }else{
+                token.setLength(0);
+                number = tmp.substring(DECENA);
+                getDecena();
+            }
+        }else{
+            token.setLength(0);
+            number = tmp.substring(UNIDAD);
+            getCentena();
+        }
+
+        return letras.toString();
+    }
+
+    private String getDecenaMillar(){
+        String tmp = number;
+        token.setLength(0);
+        number = tmp.substring(UNIDAD-1, DECENA);
+        getDecena();
+        letras.append(" mil ");
+
+        token.setLength(0);
+        token.append(tmp.charAt(DECENA));
+        if("0".contentEquals(token)){
+            token.setLength(0);
+            token.append(tmp.charAt(CENTENA));
+            if("0".contentEquals(token)){
+                token.setLength(0);
+                number = String.valueOf(tmp.charAt(tmp.length()-1));
+                getUnidad();
+            }else{
+                token.setLength(0);
+                number = tmp.substring(CENTENA);
+                getDecena();
+            }
+        }
+        else{
+            token.setLength(0);
+            number = tmp.substring(DECENA);
+            getCentena();
+        }
+        return letras.toString();
+    }
+
+    //108000
+    private String getCentenaMillar(){
+        String tmp = number;
+
+        number = tmp.substring(UNIDAD, CENTENA);
+        if("00".contentEquals(number)){
+            number = tmp.substring(0, CENTENA);
+            getCentena();
+            letras.append(" mil ");
+        }
+
+        number = tmp.substring(0, CENTENA);
+        getCentena();
+        letras.append(" mil ");
+
+        token.setLength(0);
+        number = tmp.substring(CENTENA);
         getCentena();
 
         return letras.toString();
@@ -198,6 +301,12 @@ public class ConvertNumberToLetters {
                 break;
             case UNIDAD_DE_MILLAR:
                 System.out.println(getUnidadMillar());
+                break;
+            case DECENA_DE_MILLAR:
+                System.out.println(getDecenaMillar());
+                break;
+            case CENTENA_DE_MILLAR:
+                System.out.println(getCentenaMillar());
                 break;
         }
     }
