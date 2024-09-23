@@ -1,0 +1,12 @@
+Formato predefinido -> dd/mm/yyyy
+
+Parametro   Significado
+dd          dia
+mm          mes
+yyyy        anio
+hh          hora
+MM          minuto
+ss          segundo
+
+parseDate("01/02/2020","dd/mm/yyyy") -> 1 febrero, 2020
+parseDate("01/02/2020","mm/dd/yyyy") -> enero 2, 2020
