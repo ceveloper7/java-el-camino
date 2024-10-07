@@ -96,11 +96,11 @@ public class DateParser {
             try{
                 System.out.print("Enter date: ");
                 String userDate = input.nextLine();
-                Date date = dateParser.validateDate(userDate);
-                System.out.print("Enter target date format: ");
+                System.out.println("Enter new date format. For example: mm/dd/yyyy");
                 String targetFormat = input.nextLine();
+                Date date = dateParser.validateDate(userDate);
                 dateParser.validateFormat(targetFormat);
-                //System.out.printf("%s %tB %<te, %<tY", "User date:", date);
+                System.out.printf("%s %tB %<te, %<tY", "User date:", date);
                 continueLoop = false;
             }
             catch (IllegalArgumentException ex){
@@ -111,4 +111,4 @@ public class DateParser {
         }
         while (continueLoop);
     }
-}
+}   
