@@ -5,24 +5,28 @@ package com.ceva.section5.poo.polimorfismo;
 public class BSalariedEmployee extends BEmployee{
     private double weeklySalary;
 
-    // constructor
+    /*
+     * Pre-Conditions:
+     * El salario semanal debe ser mayor a 0
+     * Post-Conditions:
+     * Crear el objeto BSalariedEmployee
+     */
     public BSalariedEmployee(String firstName, String lastName,
-                            String socialSecurityNumber, double weeklySalary) {
+                            String socialSecurityNumber, double weeklySalary) throws IllegalArgumentException{
         super(firstName, lastName, socialSecurityNumber);
 
-        if (weeklySalary < 0.0) {
+        if (weeklySalary <= 0) {
             throw new IllegalArgumentException(
-                    "Weekly salary must be >= 0.0");
+                    "Weekly salary must be > 0.0");
         }
-
         this.weeklySalary = weeklySalary;
     }
 
     // set salary
     public void setWeeklySalary(double weeklySalary) {
-        if (weeklySalary < 0.0) {
+        if (weeklySalary <= 0) {
             throw new IllegalArgumentException(
-                    "Weekly salary must be >= 0.0");
+                    "Weekly salary must be > 0.0");
         }
 
         this.weeklySalary = weeklySalary;
