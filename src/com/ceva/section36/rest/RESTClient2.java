@@ -14,7 +14,6 @@ import java.util.Locale;
 import javax.json.Json;
 import javax.json.stream.JsonParser;
 
-
 /**
  * Programa que obtiene la lista de productos
  */
