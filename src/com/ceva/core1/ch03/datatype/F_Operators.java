@@ -6,7 +6,7 @@ public class F_Operators {
         switchExp();
     }
 
-    
+
 
     private static void switchExp(){
         // switch expresion
