@@ -1,8 +1,48 @@
-package com.ceva.core1.ch03.strings;
+package com.ceva.core1.ch03;
 
 public class A_String {
     public static void main(String[] args) {
-        buildingString();
+        textBlocks();
+    }
+
+    private static void textBlocks(){
+        String msg = """
+                Hello
+                World
+                Java
+                """;
+        System.out.println(msg);
+
+        // textblock para escribir sql o html
+        String html = """
+                <h1>Java basics</h1>
+                <div>
+                    <p>hello world Java</p>
+                </div>""";
+        System.out.println(html);
+
+        // el signo \ antes del final de una linea une esta linea con la siguiente
+        String msg1 = """
+                Hello
+                Java is a programming \
+                language awsome
+                """;
+        System.out.println(msg1);
+
+        // \s agrega una espacio despues de los dos puntos (:)
+        String msg2 = """
+                Hello, my name is Carlos. \
+                Please enter your name:\s""";
+        System.out.println(msg2);
+
+        //
+        System.out.println();
+        String html2 = """
+                <div class="warning">
+                    Beware of those who say 'Hello' to the world
+                </div>
+                """;
+        System.out.println(html2);
     }
 
     /*
