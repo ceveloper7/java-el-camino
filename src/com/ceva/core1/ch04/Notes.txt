@@ -30,3 +30,11 @@ Variables de Objeto
 ===================
 Las variables de objeto NO CONTIENEN objetos sino almacenan la referencia o direccion de memoria donde
 esta creado el objeto.
+
+Cuando usar static methods:
+==========================
+1. Cuando un metodo no necesita acceder al estado del objeto porque todos los parametros que necesita
+   estan provistos como parametros explicitos.
+2. Cuando un metodo solo necesita acceder a campos static de la clase.
+
+
