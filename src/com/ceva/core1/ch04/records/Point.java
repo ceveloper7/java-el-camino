@@ -1,5 +1,7 @@
 package com.ceva.core1.ch04.records;
 
+import java.util.Date;
+
 /*
  * El resultado es tener una clase con 2 campos de instancia
  * private final double x
@@ -13,6 +15,11 @@ package com.ceva.core1.ch04.records;
  * public double y()
  */
 public record Point(double x, double y) {
+    // no-arguments constructor
+    public Point(){
+        // canonical constructor
+        this(0,0);
+    }
     // static field allowed
     public static Point ORGING = new Point(0,0);
 
@@ -22,12 +29,21 @@ public record Point(double x, double y) {
     }
 
     // los record permiten metodos static
-    public static double distanceFromOrigin(Point p, Point q){
+    public static double distance(Point p, Point q){
         return Math.hypot(p.x() - q.x(), p.y() - q.y());
     }
+}
 
-    public static void main(String[] args) {
-        var p = new Point(3,4);
-        System.out.println(p.x() + ", " + p.y());
+// record mutable
+record PointInTime(double x, double y, Date when){}
+
+record Range(int from, int to){
+    // constructor compacto
+    public Range{
+        if(from > to){
+            int temp = from;
+            from = to;
+            to = temp;
+        }
     }
 }
