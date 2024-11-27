@@ -1,0 +1,32 @@
+Objetos
+=======
+3 Caracteristicas claves de los objetos
+    1. Comportamiento -> que se puede hacer con el objeto o que metodos se pueden aplicar de el
+    2. Estado -> como reacciona el objeto cuando se invocan sus metodos
+    3. identidad -> como se distingue el objeto de otros objetos que pueden tener el mismo estado y comportamiento
+
+Al disenar un sistema orientado a objetos el primer paso es identificar las clases y luego agregar los metodos
+a cada clase.
+
+Relacion entre clases
+=====================
+Dependencia -> USA UN. Una clase depende de otra clase si sus metodos usan o manipulan objetoso de esa clase.
+               La dependencia genera acoplamiento entre clases
+Agregacion -> TIENE UN. La relacion "tiene un" es facil de entender. Por ejemplo el objeto Pedido contiene
+              objetos Producto. Agregacion significa que los objetos de la clase A contienen a los objetos
+              de la clase B
+Herencia -> ES UN. La herencia expresa la relacion entre una clase mas concreta y una mas general.
+            Por ejemplo: la clase PedidoRapido hereda de la clase Pedido. La clase concreta PedidoRapido
+            tiene metodos especiales para el manejo de prioridades y un metodo diferente para calcular
+            los gastos de envio, pero sus otros metodos como agregar articulo y facturar se heredan de
+            la clase Pedido.
+
+Diagrama UML
+    La clase PedidoRapido hereda de la clase Pedido
+    La clase Pedido depende de la clase Cuenta
+    La clase Item es una agregado en la clase Pedido
+
+Variables de Objeto
+===================
+Las variables de objeto NO CONTIENEN objetos sino almacenan la referencia o direccion de memoria donde
+esta creado el objeto.
