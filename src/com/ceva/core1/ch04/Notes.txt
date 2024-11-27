@@ -68,4 +68,14 @@ Que pasa en detalle cuando un constructor es llamado
             en el que ellos aparecen en la declaracion de la clase.
 3. El cuerpo del constructor es ejecutado.
 
+Record
+======
+Es una forma espcial de una clase, cuyo estado es inmutable y leible por el publico. Cada record tiene
+tres metodos definidos automaticamente: hasCode, toString, equals.
+Un record no puede incluir campos de instancia.
+Un record como una clase puede tener campos y metodos static
+
+Tip: Utilice record en lugar de class para datos inmutables que es completamente representado por un
+     conjunto de variables. Utilice class si los datos son mutables, o si la representacion puede
+     cambiar en el tiempo. Los record son mas eficientes y seguros en programas concurrentes.
 
