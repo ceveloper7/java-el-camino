@@ -37,4 +37,35 @@ Cuando usar static methods:
    estan provistos como parametros explicitos.
 2. Cuando un metodo solo necesita acceder a campos static de la clase.
 
+Metodos con parametros
+======================
+    Paso por valor: el metodo obtiene solo el valor que el llamante ofrece
+    Paso por referencia: el metodo obtiene la ubicacion de la variable  que el llamante provee. Por lo que
+                         un metodo puede modificar el valor almacenado en una variable pasado por referencia
+                         pero no en una pasada por valor.
+    Java siempre emplea la llamada por valor. lo que significa que los metodos reciben una copia de todos los
+    argumentos. en particular los metodos no pueden modificar el contenido de ninguna variable en la
+    llamada de metodo.
+
+Tipos de parametros de metodo
+=============================
+1. tipos primitivos (byte, short, int, boolean, char, float, double, long)
+2. referencia a objetos (String, Array, etc...)
+
+En resumen
+==========
+1. Un metodo no puede modificar un parametro de un tipo primitivo
+2. Un metodo puede cambiar el estado de un parametro objeto
+3. Un metodo no puede hacer un parametro object referencie a un nuevo objeto
+
+Que pasa en detalle cuando un constructor es llamado
+====================================================
+1. Si la primera sentencia del constructor llama a un segundo constructor, entonces el segundo constructor
+   se ejecuta con los argumentos provistos.
+2. En otro caso
+        2.1 Todos los campos de instancia son inicializados a su valor por defecto (0, false, null)
+        2.2 Todos los inicializadores de campos y bloques de inicializacion son ejecutados. en el orden
+            en el que ellos aparecen en la declaracion de la clase.
+3. El cuerpo del constructor es ejecutado.
+
 

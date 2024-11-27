@@ -13,7 +13,7 @@ public class EmployeeTest {
         }
 
         for(Employee e : staff){
-            System.out.printf("Id: %d, Name: %s, Hire Date: %s Salary: %,8.2f%n", e.getId(), e.getName(), e.getHireDay().toString(), e.getSalary());
+            System.out.printf("Id: %d, Name: %s, Hire Date: %s, Salary: %,8.2f%n", e.getId(), e.getName(), e.getHireDay().toString(), e.getSalary());
         }
     }
 }
