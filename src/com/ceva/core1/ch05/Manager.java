@@ -38,4 +38,11 @@ public class Manager extends Employee {
        double salary = super.getSalary();
        return salary + this.bonus;
     }
+
+    @Override
+    public String toString() {
+        return
+                super.toString() +
+                " bonus=" + bonus;
+    }
 }
