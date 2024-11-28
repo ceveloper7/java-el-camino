@@ -1,0 +1,30 @@
+Subclasses Constructor
+======================
+Cuando un objeto Subclase es construido sin una invocacion explicita al constructor de la super clase.
+La super clase debe tener un constructor sin argumentos. El constructor de la super clase es invocado
+antes de la construccion de la subclase.
+
+Polimorfismo
+============
+La regla IS A (ES UN) esta regla nos ayuda a saber si cada objeto de la subclase es un objeto de la superclase.
+Por ejemplo cada Manager es un Employee por lo tanto la clase Manager es una subclase de la clase Employee.
+Sin embargo lo opusto no es verdad, cada objeto de la clase Employee no es un Manager.
+
+La regla del principio de sustitucion no dice que podemos usar un objeto de la subclase si el programa
+espera un objeto de la superclase.
+
+El polimorfismo en java lo podemos ver en el hecho de que un objeto de la clase Empployee puede hacer
+referencia a un objeto de la clase Employee o un objeto de la subclase Employee como Manager, Executive
+o Secretary.
+
+Evitando la herencia: Clases y metodos final
+============================================
+Al declarar una clase como final evitar que se pueda extender o heredar dicha clase.
+Cuando una clase se declara final automaticamente sus metodos son final pero no son final
+las variables de instancia. Un metodo final hace que dicho metodo no pueda ser modificado por alguna subclase.
+
+La unica buena razon para hacer de una clase o metodo final es que queremos asegurarnos de que su semantica
+no se puede cambiar en una subclase.
+
+Casting
+=======
