@@ -28,3 +28,21 @@ no se puede cambiar en una subclase.
 
 Casting
 =======
+Solo podemos aplicar casting dentro de la jerarquia de herencia
+Podemos usar instanceof para verificar antes del casting de una superclase a una subclase
+
+Receta para escribir un metodo equals()
+=======================================
+1. Nombrar el parametro explicito otherObject luego, necesitamos aplicar cast a otra variable que
+   deberiamos llamar other.
+2. Validar si this resulta ser identico a otherObject: if(this==otherObject) return true;
+   Es mucho mas barato verificar la identidad que comparar los campos.
+3. Validar si otherObject es null y retornar false: if(otherObject==null) false;
+4. Comparar las clase this y otherObject
+   if(getClass() != otherObject.getClass()) return false;
+   ClassName other = (ClassName)otherObject;
+5. Ahora, compare los campos, como lo necesite su nocion de igualdad. utilice == para campos primitivos,
+   utilice Objects.equals() para campos tipo object, retorne true si todos los campos coinciden, retorne
+   false en otro caso.
+   return field1 == other.field1 && Objects.equals(field2, other.field2) && ...
+Si redefinimos equals en la subclase, incluya llamar super.equals(other)

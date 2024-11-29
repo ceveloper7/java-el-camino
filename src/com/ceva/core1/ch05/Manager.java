@@ -2,6 +2,8 @@ package com.ceva.core1.ch05;
 
 import com.ceva.core1.ch04.model.Employee;
 
+import java.util.Objects;
+
 /*
  * 5.1 Classes, Superclasses, Subclasses,
  * extends -> permite aplicar el concepto de herencia, definiendo una subclase
@@ -35,14 +37,26 @@ public class Manager extends Employee {
     @Override
     public double getSalary() {
         // super.getSalary() llamamos al metodo getSalary() de la Superclass Employee
-       double salary = super.getSalary();
+       var salary = super.getSalary();
        return salary + this.bonus;
+    }
+
+    @Override
+    public boolean equals(Object otherObject){
+        if(!super.equals(otherObject))return  false;
+        var other = (Manager) otherObject;
+        return this.bonus == other.bonus;
+    }
+
+    @Override
+    public int hashCode(){
+        return Objects.hash(super.hashCode(), bonus);
     }
 
     @Override
     public String toString() {
         return
                 super.toString() +
-                " bonus=" + bonus;
+                "[bonus=" + bonus + "]";
     }
 }

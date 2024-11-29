@@ -4,6 +4,11 @@ import java.time.LocalDate;
 import java.util.Objects;
 import java.util.random.RandomGenerator;
 
+/*
+ * En lo casos donde una clase parece requerir multiples constructores con la misma firma, reemplace
+ * los constructores con metodos de fabrica static y nombres cuidadosamente elegidos para resaltar
+ * sus diferencias.
+ */
 public class Employee {
     private static final RandomGenerator generator = RandomGenerator.getDefault();
     private static int nextId;
@@ -32,13 +37,19 @@ public class Employee {
         nextId = generator.nextInt(10000);
     }
 
-    // Constructor por defecto
+    // Constructor con valores por defecto
     public Employee(){
         name = "";
         salary = 0;
         hireDay = LocalDate.now();
     }
 
+    // Metodo static de Fabrica
+    public static Employee create(String name, double salary, int year, int month, int day){
+        return new Employee(name, salary, year, month, day);
+    }
+
+    // Constructor publico
     public Employee(String name, double salary, int year, int month, int day){
         id = advancedId(); // inicializacion llamando a un metodo.
         // evitamos recibir un valor null
@@ -86,12 +97,43 @@ public class Employee {
         this.salary += raise;
     }
 
+    /*
+     * equals() prueba si dos referencias a objetos son identicas. Hay ocasiones donde se necesita
+     * implementar pruebas de igualdad basadas en el estado, en las que dos objetos se consideran
+     * iguales cuando tienen el mismo estado.
+     */
+    @Override
+    public boolean equals(Object otherObject){
+        // una rapida prueba si los objetos son identicos
+        if(this == otherObject) return true;
+
+        // false si el parametro es null
+        if(otherObject == null) return false;
+
+        // getClass retorna la clase del objeto. Si las clases no coinciden no pueden ser iguales
+        // 2 objetos solo pueden ser iguales cuando pertenecen a la misma clase.
+        if(this.getClass() != otherObject.getClass()) return  false;
+
+        // ahora sabemos que otherObject no es un Employee null
+        var other = (Employee) otherObject;
+
+        // pruebamos si los campos contienen identicos valores
+        return Objects.equals(name, other.name) && salary == other.salary && Objects.equals(hireDay, other.hireDay);
+    }
+
+    // hashCode safe-null with Objects.hashCode
+    @Override
+    public int hashCode(){
+//        return 7 * Objects.hashCode(this.name) + 11 * Double.hashCode(this.salary) +
+//                13 * Objects.hashCode(this.hireDay);
+        return Objects.hash(name, salary, hireDay);
+    }
+
     @Override
     public String toString() {
-        return "Employee: " +
-                "id=" + id +
-                ", name='" + name + '\'' +
+        return getClass().getName() +
+                "[name='" + name + '\'' +
                 ", salary=" + salary +
-                ", hireDay=" + hireDay;
+                ", hireDay=" + hireDay + "]";
     }
 }
