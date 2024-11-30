@@ -1,5 +1,7 @@
 package com.ceva.core1.ch04.model;
 
+import com.ceva.core1.ch05.Person;
+
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.random.RandomGenerator;
@@ -9,12 +11,12 @@ import java.util.random.RandomGenerator;
  * los constructores con metodos de fabrica static y nombres cuidadosamente elegidos para resaltar
  * sus diferencias.
  */
-public class Employee {
+public class Employee extends Person {
     private static final RandomGenerator generator = RandomGenerator.getDefault();
     private static int nextId;
 
     private int id;
-    private String name;
+    //private String name;
     private double salary;
     private LocalDate hireDay;
 
@@ -39,7 +41,8 @@ public class Employee {
 
     // Constructor con valores por defecto
     public Employee(){
-        name = "";
+        super("");
+        //name = "";
         salary = 0;
         hireDay = LocalDate.now();
     }
@@ -51,9 +54,10 @@ public class Employee {
 
     // Constructor publico
     public Employee(String name, double salary, int year, int month, int day){
+        super(Objects.requireNonNull(name, "The name cannot be null"));
         id = advancedId(); // inicializacion llamando a un metodo.
         // evitamos recibir un valor null
-        this.name = Objects.requireNonNull(name, "The name cannot be null");
+        //this.name = Objects.requireNonNull(name, "The name cannot be null");
         this.salary = salary;
         this.hireDay = LocalDate.of(year, month, day);
     }
@@ -68,13 +72,18 @@ public class Employee {
         return this.id;
     }
 
-    public String getName() {
-        return name;
+    @Override
+    public String getDescription(){
+        return "an employee with a salary of %,.2f".formatted(salary);
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+//    public String getName() {
+//        return name;
+//    }
+//
+//    public void setName(String name) {
+//        this.name = name;
+//    }
 
     public double getSalary() {
         return salary;
@@ -118,7 +127,7 @@ public class Employee {
         var other = (Employee) otherObject;
 
         // pruebamos si los campos contienen identicos valores
-        return Objects.equals(name, other.name) && salary == other.salary && Objects.equals(hireDay, other.hireDay);
+        return Objects.equals(super.getName(), other.getName()) && salary == other.salary && Objects.equals(hireDay, other.hireDay);
     }
 
     // hashCode safe-null with Objects.hashCode
@@ -126,13 +135,13 @@ public class Employee {
     public int hashCode(){
 //        return 7 * Objects.hashCode(this.name) + 11 * Double.hashCode(this.salary) +
 //                13 * Objects.hashCode(this.hireDay);
-        return Objects.hash(name, salary, hireDay);
+        return Objects.hash(super.getName(), salary, hireDay);
     }
 
     @Override
     public String toString() {
         return getClass().getName() +
-                "[name='" + name + '\'' +
+                "[name='" + super.getName() + '\'' +
                 ", salary=" + salary +
                 ", hireDay=" + hireDay + "]";
     }

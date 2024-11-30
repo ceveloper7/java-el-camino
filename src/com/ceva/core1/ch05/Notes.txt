@@ -46,3 +46,64 @@ Receta para escribir un metodo equals()
    false en otro caso.
    return field1 == other.field1 && Objects.equals(field2, other.field2) && ...
 Si redefinimos equals en la subclase, incluya llamar super.equals(other)
+
+ArrayList
+=========
+Insertar y eliminar elemento de un ArrayList no es muy eficiente. Si vamos a almacenar muchos elementos y
+vamos a insertar y eliminar con mucha frecuencia en el medio de una coleccion, deberiamos considerar el
+uso de una LinkedList.
+
+Wrapper objects
+===============
+Cada uno de los tipos primitivos tiene su contra parte en clase como Byte, Short, Integer, Float, Double
+Long, Character, Boolean, las primeras seis heredan de su superclase comun Number.
+
+Las wrapper clases son inmutables por lo que una vez construidas no se pueden cambiar su valor y tambien
+las wrapper clasess son final por lo que no se pueden heredar.
+var list = new ArrayList<int>(); // ERROR
+var list = new ArrayList<Integer>(); //OK
+
+Nota: ArrayList<Integer>() es menos eficiente que int[]. utilice ArrayList<Integer>() para pequenas
+colecciones.
+
+Autoboxing: autoboxing ocurre cuando un valor primitivo lo convertimos a objeto, como en el sgte ejemplo
+==========
+ejemplo de autoboxing: list.add(3); esto equivale a list.add(Integer.valueOf(3));
+
+UnBoxing: ocurre cuando un objeto Integer lo asignamos a un valor primitivo int.
+=========
+ejemplo de unboxing: int n = list.get(0);
+el compilador lo convierte a: n = list.get(0).intValue();
+
+Diferencia entre el valor primitivo y su tipo wrapper
+=====================================================
+como sabemos el operador == aplicado a objetos wrapper verifica si los objetos poseen las misma direccion
+de memoria. por ejemplo:
+Integer a = 1000;
+Integer b = 1000;
+a == b // false;
+a.equals(b); // true
+
+El boxing y unboxing una cortesia del compilar y no de la JVM
+
+VarArgs methods (metodo con numero variable de argumentos)
+==========================================================
+public PrintStream printf(String fmt, Object... args)
+las elipsis ... denotan que el metodo puede recibir un numero arbitrario de objetos.
+el metodo printf recibe dos parametros uno String y otro Object[] por lo tanto
+Object... es igual a Object[]
+
+Podemos definir nuestros propios metodos con argumentos variables:
+public static double max(double... values)
+para llamar a la funcion: double m = max(5, 6.7, -8)
+el compilador pasa un new Double[]{5, 6.7, -8} al metodo max
+
+Clases Abstractas (Abstract class)
+==================================
+Las clases abstractas pueden contener metodos concretos. todos los campos y metodos comunes se deberian
+mover hacia una super clase.
+Si una clase es declarada como abstract no puede ser instanciada, es decir, no se pueden crear
+objetos concretos de dicha clase.
+Podemos crear variable de objeto de una clase abstracta, pero dicha variable debe hacer referencia a
+un objeto de una clase no abstracta. por ejemplo:
+Person p = new Student("Fernando");
