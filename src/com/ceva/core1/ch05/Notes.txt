@@ -107,3 +107,75 @@ objetos concretos de dicha clase.
 Podemos crear variable de objeto de una clase abstracta, pero dicha variable debe hacer referencia a
 un objeto de una clase no abstracta. por ejemplo:
 Person p = new Student("Fernando");
+
+Sealed class
+============
+Una sealed class controla que clases pueden heredar de ella.
+Ejemplo de una declaracion sealed class
+
+public abstract sealed class JSONVale
+    permits JSONArray, JSONNumber, JSONString, JSONBoolean, JSONObject, JSONNull
+{}
+Sealed classes permiten un modelado del dominio de negocio mas exacto.
+Las clases permitidas de una sealed class deben ser accesibles. ellas no pueden ser clases privadas
+que estan anidadas a otras clases.
+Las subclasses permitidas deben ser publicas, ellas deben estar en el mismo paquete de la sealed class
+
+Nota: Una sealed class puede ser declarada sin permits, entonces todas sus subclasses directas deben estar
+      declaradas dentro del mismo archivo.
+
+Una subclase de una sealed class debe especificar si es sealed, final o esta abierta a subclassing, en el
+ultimo caso, debe estar declarada como non-sealed.
+
+Pattern Matching Using instanceof
+=================================
+El operador instanceof nos permite verificar si un objeto tiene un tipo particular. La forma mas conveniente
+de instanceof es declarar una variable de type matching. cada sentencia condicional debe establecer el valor
+de description.
+Por ejemplo:
+Employee ee = ...
+String description;
+if(ee instanceof Executive exec){
+    description="Is an Executive";
+}
+exec.getTitle();
+else if(ee instanceof Manager m){
+    description="Is an Manager";
+}
+else{
+    description="Is a regular employee";
+}
+ee.getSalary();
+
+Pattern matching using Switch
+=============================
+Switch expresion es mas simple que una cadena de if statements. switch expression retorna una valor
+que se asigna a la variable description.
+Ejemplo:
+Employee ee = ...
+String description = switch(e){
+    case Executive exec -> "An Executive " + ee.getTitle();
+    case Manager m -> "A Manager " + m.getTitle();
+    default -> "A regular employee"
+}
+
+Lo comun en ambos pattern matching es que en estos casos ambos declaran una variable type matched.
+Utilizamos dichas variables para acceder a los metodos de las subclases.
+
+Preview Note: Java 21 introduces unnamed variables as a
+preview feature. If you don't need the variable in a type pattern, use
+an underscore:
+case Employee _ -> "A lowly employee"
+Until this feature becomes generally available, you can use two
+underscores:
+case Employee __ -> "A lowly employee"
+
+Si no queremos hacer nada cuando no hay coincidencia con una case, podemos escribir
+default: break;
+
+Guards
+======
+Podemos agregar un condition al pattern matching llamado guard usando el keyword "when"
+case Executive exec when exec.getTitle().getLength() >= 20 -> "An Executive with great title"
+en el guard expression podemos usar la variable exec que en el pattern se introdujo. Si el guard expression
+no se cumple, el caso no es seleccionado y se pasa al siguiente case
