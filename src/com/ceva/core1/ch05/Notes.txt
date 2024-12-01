@@ -207,5 +207,24 @@ javac resources/ResourceTest.java
 jar cvfe ResourceTest.jar resources.ResourceTest resources/*.class resources/*.gif resources/data/*.txt external/*.txt
 java -jar ResourceTest.jar
 
+Sugerencias de Diseno para la Herencia
+======================================
+1. Coloque campos y metodos comunes en la super clase
 
+2. No utilice protected fields: en java las subclases de una superclase y las clases en el mismo paquete
+   pueden acceder a los atributos protected lo cual rompe el concepto de encapsulamiento.
+   Sin embargo, los metodos protected pueden ser utiles para indicar metodos que no estan listos para uso
+   general y deben definirse en subclases.
 
+3. Usar la herencia para modelar la relacion "IS A":
+4. No use la herencia a menos que todos los metodos heredados tengan sentido
+5. No cambie el comportamiento esperado cuando sobrescribe un metodo.
+6. Utilice el polimorfismo: Si encuentra un codigo de esta forma
+   if (x is of type 1)
+    action1(x);
+   else if (x is of type 2)
+    action2(x);
+
+   Debemos pensar en el polimorfismo. Si action1 u action2 representan un mismo concepto, haga el concepto
+   un metodo de una superclase comun o interface de ambos tipos. Luego simplemente llama a
+   x.action();
