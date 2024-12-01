@@ -179,3 +179,33 @@ Podemos agregar un condition al pattern matching llamado guard usando el keyword
 case Executive exec when exec.getTitle().getLength() >= 20 -> "An Executive with great title"
 en el guard expression podemos usar la variable exec que en el pattern se introdujo. Si el guard expression
 no se cumple, el caso no es seleccionado y se pasa al siguiente case
+
+Reflexion
+=========
+Cuando un programa esta en ejecucion el runtime type identification lleva un registro de la clase
+a la que cada objeto pertenece.
+
+Para compilar el ejemplo ResourceTest.java
+==========================================
+1. Nos ubicamos en la raiz del proyecto: /local-projects/intellij/java-core/java-el-camino/src
+2. Ejecutamos el comando: javac com/ceva/core1/ch05/resources/ResourceTest.java
+3. Creamos un archivo .jar con las clases compiladas y sus resources:
+jar cvfe com/ceva/core1/ch05/resources/ResourceTest.jar com/ceva/core1/ch05/resources/ResourceTest  com/ceva/core1/ch05/resources/*.class  com/ceva/core1/ch05/resources/*.gif  com/ceva/core1/ch05/resources/data/*.txt  com/ceva/core1/ch05/corejava/*.txt
+4. Ejecutar el archivo: java -jar ResourceTest.jar
+
+en ocasiones puede ser dificil compilar los archivos fuentes debido a las muchas carpetas.
+Imaginemos que el ejemplo esta ubicado en la raiz de C:/sample
+sample
+    external
+    resources
+        data
+        about.gif
+        ResourceTest.java
+Compilacion
+===========
+javac resources/ResourceTest.java
+jar cvfe ResourceTest.jar resources.ResourceTest resources/*.class resources/*.gif resources/data/*.txt external/*.txt
+java -jar ResourceTest.jar
+
+
+
