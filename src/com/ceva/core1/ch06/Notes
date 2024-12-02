@@ -1,0 +1,61 @@
+Interfaces
+==========
+Las interfaces describen lo que una clase debe hacer sin especificar como deben hacerlo. Las interfaces
+no son una clase sino un conjunto de requisitos para las clases que desean ajustarse a la interface.
+
+Algunas interfaces tienen un unico metodo, otras poseen multiples metodos pero estos metodos no pueden
+referirse a campos de instancias. A una interface podemos agregar metodos static
+
+Los metodos en una interface pueden ser privados, estos metodos privados pueden ser static o
+un metodo de instancia. Ya que los metodos privados pueden ser solo usados en los metodos de las interfaces
+mismas, su uso esta limitado a ser helper de otros metodos de la interface.
+
+Las interfaces pueden definir constantes. Lo que una interface no puede proveer:
+Una interface no puede tener campos de instancia.
+
+Propiedades de las Interfaces
+=============================
+No podemos construir un objeto de tipo interface, es decir, no podemos usar el operador new con una interface
+Si podemos declarar variables de tipo interface y dicha variable debe hacer referencia a una clase que
+implementa la interface. Por ejemplo: Comparable x = new Employee...
+
+Asi como utilizamos instanceof para saber si un objeto es de una clase especifica, podemos usar
+instanceof para saber si un objeto implementa una interface
+Ejemplo: if(x instanceof Comparable)
+
+Asi como se puede crear jerarquias de clases, podemos ampliar las interfaces.
+Aunque no podemos declarar atributos de instancias en una interface, lo que si podemos hacer
+es declarar constantes. Asi como un metodo en una interface es automaticamente public,
+los atributos son automaticamente public static final por lo que no es necesario u obligatorio
+escribirlo, basta con: double PI = 3.1416;
+
+Los records y las enumeraciones puede implementar interfaces
+Las interfaces pueden ser sealed como con las clases sealed los subtipos directos deben ser declarados
+utilizando la clausula permits
+
+Metodos Default en la interface
+===============================
+para declarar un metodo como default, debemos emplear el tag default:
+default int compareTo()
+Un metodo default puede llamar a otros metodos.
+
+Interfaces y Callbacks
+======================
+En el patron callback usted especifica la accion que deberia ocurrir si un evento particular sucede.
+Por ejemplo: Cuando se produzca el evento click al presionar un boton o seleccionar un elemento de
+un menu se realiza una accion en particular.
+
+Expresiones Lambda
+==================
+Permite crear bloques de codigo que se ejecutan en un momento posterior.
+
+
+
+
+
+
+
+Inner Classes
+=============
+Es una clase dentro de otra clase, los metodos de una inner class puede acceder a los atributos de instancia
+de la clase circundante

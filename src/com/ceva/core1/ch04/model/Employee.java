@@ -10,8 +10,9 @@ import java.util.random.RandomGenerator;
  * En lo casos donde una clase parece requerir multiples constructores con la misma firma, reemplace
  * los constructores con metodos de fabrica static y nombres cuidadosamente elegidos para resaltar
  * sus diferencias.
+ * A la interface Comparable le proporcionamos un parametro de tipo.
  */
-public class Employee extends Person {
+public class Employee extends Person implements Cloneable, Comparable<Employee> {
     private static final RandomGenerator generator = RandomGenerator.getDefault();
     private static int nextId;
 
@@ -144,5 +145,19 @@ public class Employee extends Person {
                 "[name='" + super.getName() + '\'' +
                 ", salary=" + salary +
                 ", hireDay=" + hireDay + "]";
+    }
+    /**
+     * Compares employees by salary.
+     * @param other another Employee object
+     * @return a negative value if first argument (this employee) has a lower salary than second argument
+     * (other param), 0 if the salaries are the same, a positive value otherwise
+     */
+    @Override
+    public int compareTo(Employee other) {
+        return Double.compare(salary, other.salary);
+    }
+
+    public Employee clone()throws CloneNotSupportedException{
+        return (Employee) super.clone();
     }
 }
