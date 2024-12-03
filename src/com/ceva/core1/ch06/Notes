@@ -49,10 +49,9 @@ Expresiones Lambda
 ==================
 Permite crear bloques de codigo que se ejecutan en un momento posterior.
 
-
-
-
-
+Interfaces funcionales
+======================
+Podemos pasar una expresion lambda si se espera un objeto de una interface con un solo metodo.
 
 
 Inner Classes

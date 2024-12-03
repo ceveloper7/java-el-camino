@@ -10,6 +10,7 @@ import java.util.Comparator;
 public class LengthComparator implements Comparator<String> {
     @Override
     public int compare(String o1, String o2) {
+        // verificamos si un String o1 es mas pequeno que otro String o2
         return o1.length() - o2.length();
     }
 }
