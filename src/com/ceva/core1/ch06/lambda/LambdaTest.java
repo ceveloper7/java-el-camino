@@ -2,10 +2,17 @@ package com.ceva.core1.ch06.lambda;
 
 import com.ceva.core1.ch04.model.Employee;
 
+import java.time.LocalDate;
 import java.util.*;
+import java.util.function.BiFunction;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import javax.swing.*;
 import javax.swing.Timer;
+
+import static java.util.stream.Collectors.toList;
 
 public class LambdaTest {
     private static final String[] planets = new String[]{
@@ -26,7 +33,55 @@ public class LambdaTest {
 
     public static void main(String[] args) {
         LambdaTest lambdaTest = new LambdaTest();
-        lambdaTest.sortString();
+        lambdaTest.createFakeEmployees();
+    }
+
+    private void createFakeEmployees(){
+        Supplier<Employee> fakeEmp = () -> new Employee("Nuevo Empleado", 10000, 2024, 12, 3);
+        Employee[] employees = new Employee[3];
+        for (int i = 0; i < employees.length; i++){
+            employees[i] = fakeEmp.get();
+        }
+
+        System.out.println(Arrays.stream(employees).toList());
+    }
+
+    private void employeesHiredInAYear(List<Employee> staff){
+        Predicate<Employee> hiredInAYear = employee -> employee.getHireDay().getYear() == 2008;
+        for (Employee emp : staff){
+            if(hiredInAYear.test(emp)){
+                System.out.println(emp);
+            }
+        }
+    }
+
+    private void increseSalary(List<Employee> staff){
+        double INCREASE = 10.0;
+
+        BiFunction<Employee, Double, Employee> increasySalary = ((employee, percentage) -> {
+            double newSalary = employee.getSalary() * (1 + percentage / 100);
+            employee.setSalary(newSalary);
+            return employee;
+        });
+
+        // aumento salario a todos los empleados
+        for(Employee emp : staff){
+            increasySalary.apply(emp, INCREASE);
+        }
+        System.out.println(staff);
+    }
+
+    private void sumSalaries(List<Employee> staff){
+        double salaries = staff.stream()
+                .map(Employee::getSalary)
+                .reduce(0.0, Double::sum);
+        System.out.printf("Total salaries: %,9.2f", salaries);
+    }
+
+    private void getMaxSalary(List<Employee> staff){
+        Optional<Employee> empWithMaxSalary = staff.stream()
+                .max(Comparator.comparing(Employee::getSalary));
+        System.out.println(empWithMaxSalary);
     }
 
     private void passingLambdaAction(){

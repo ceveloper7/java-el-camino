@@ -54,7 +54,14 @@ Interfaces funcionales
 Podemos pasar una expresion lambda si se espera un objeto de una interface con un solo metodo.
 
 
+
 Inner Classes
 =============
-Es una clase dentro de otra clase, los metodos de una inner class puede acceder a los atributos de instancia
-de la clase circundante
+Es una clase dentro de otra clase. Las razones para tener una inner clase pueden ser:
+1. inner classes pueden estar ocultas de otras clases en el mismo paquete.
+2. los metodos de las inner classes pueden acceder a los datos desde su alcance en el que han sido
+   definidos, incluyendo los datos que de otro modo serian privados.
+
+Existen: Inner class, Local inner class, anonumous inner class, static inner class
+
+
