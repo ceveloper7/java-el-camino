@@ -192,3 +192,27 @@ llamado automaticamente, es exactamente igual como se hubiese usado el bloque fi
 
 Un bloque try-with=Resources puede tener un bloque catch y un bloque finllay, estos bloques son
 ejecutados luego que los recursos son cerrados.
+
+Usando Aserciones o Afirmaciones
+================================
+Las afirmaciones o asserts son un mecanismo que le permite hacer comprobaciones durante las pruebas y
+eliminarlas automaticamente en el codigo de produccion. Los asserts tienen dos formas:
+
+assert conditions;
+y
+assert condition: expression;
+
+ambas condiciones evaluan la expresion y lanzan un AssertError si es falsa. En la segunda declaracion, la
+expresion se pasa al constructor de la clase AssertError convertido en un String
+
+Para assert o afirmar que x no es negativo, podemos escribir:
+assert x >= 0;
+
+O podemos pasar el valor actual de x al objeto AssertError para que se meuetre luego
+assert x >= 0 : x;
+
+Las afirmaciones o assert solo deben utilizarse para localizar errores internos del programa durante las
+pruebas.
+
+Logging
+=======
