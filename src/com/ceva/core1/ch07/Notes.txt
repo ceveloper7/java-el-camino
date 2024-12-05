@@ -1,0 +1,194 @@
+Exceptions, Assertions y Logging
+================================
+La mision del manejo de excepciones es transferir el control desde donde ocurrio el error a un controlador
+de errores que pueda lidiar con la situacion.
+
+En java toda excepcion que se deriva de la clase Error y RuntimeException se denominan excepciones no
+verificadas o unchecked exception. Todas las demas excepciones que no se derivan de RuntimeException se
+denominan checked exceptions o excepciones verificadas y el compilador de java comprueba que usted
+proporcione un controlador para manejar las excepciones verificadas.
+
+La regla si es una excepcion no verificada o unchecked exception "ES TU CULPA" funciona bastante bien.
+Son errores que se podrian haber evitado con una buena tecnica de programacion. El compilador de java
+no exigira que manejemos las excepciones no verificadas para darle una mejor legibilidad al codigo pero
+es la responsabilidad de todo programador al momento de escribir un metodo, considerar las cosas que
+podrian salir mal en su codigo y proporcionar un controlador para esas situaciones.
+
+Ejemplo de la definicion de una check excepcion:
+
+public FileInputStream(String name) throws FileNotFoundException.
+
+Segun esta firma la creacion de un objeto FileInputStream puede salir mal y eso lo indica con la palabra clave
+throws FileNotFoundException. Si la creacion falla no se genera el objeto FileInputStream en su lugar
+se lanza un objeto FileNotFoundException. Si se lanza la excepcion el sistema en tiempo de ejecucion comenzara
+a buscar un controlador para la excepcion que sepa tratar objeto FileNotFoundException.
+
+Cuando escribe un metodo no tiene que indicar todos los objetos throwable que su metodo puede lanzar. Para
+saber cuando usar throws y lanzar exception puede seguir estas guias:
+
+1. Cuando llama a un metodo que lanza una excepcion verificada o checked exception por ejemplo si llama al
+   constructor de la clase FileInputStream(String file) debera controlar la excepcion que lanza este
+   constructor.
+
+2. Detectas un error y lanzas un checked exception con la setencia throw que es distinta a throws
+3. Cuando cometemos un error de programacion que lanza un excepcion no verificada o unchecked como un
+   NullPointerException oArrayIndexOutOfBoundsException.
+4. Un error interno ocurre en la JVM o la biblioteca runtime
+
+Si el metodo que estoy programando llama a un metodo que lanza un checked exception o en el metodo que estoy
+programando dectecto un error lanzo una checked exception con la clausula throw para informar a los usuarios
+(programadores) de mi metodo sobre la posibilidad de un error.
+Cualquier metodo que lanza un error es una trampa mortal potencial porque si ningun controlador detecta la
+excepcion, el hilo de ejecucion actual termina abruptamente.
+
+Para declarar que uno de nuestros metodos puede lanzar una checked excepcion, lo hacemos la de siguiente manera:
+class MyAnimation
+{
+    public Image loadImage(String s) throws IOException
+}
+
+si el metod podria lanzar mas de una excepcion, las agregamos separadas por comas:
+    public Image loadImage(String s) throws IOException, FileNotFoundException, EOFException
+
+Por otro lado, no debemos informar sobre las unchecked exception que se heredan de RuntimeException
+porque las excepciones en tiempo de ejecucion estan bajo de nuestro control. Por ejemplo lo siguiente
+seria un mal estilo de programacion
+    public void drawImage() throws ArrayIndexOutOfBoundsException
+
+ Si soy consciente de que se puede producir que se puede producir un error de indice de array, entonces debo
+ invertir el tiempo necesario para evitar que esa situacion se produzca.
+
+ En resumen, un metodo debe declarar todas las checked exception que se podrian lanzar. Las unchecked
+ exception estan bajo nuestra responsabilidad o control
+
+ Cuando un metodo en una clase declara que lanza una excepcion que es una instancia de una clase particular,
+ esta podria lanzar una excepcion de la clse o de cualquiera de sus subclases. por ejemplo FileInputStream
+ tiene un constructor que podria haber declarado throws IOException, en dicho caso, no podriamos haber
+ sabido que tipo de IOException lanza podria haber sido una IOException o una de sus muchas subclases
+ como es FileNotFoundException.
+
+ Atrapando la Excepcion
+ ======================
+ Si una excepcion ocurre y no es atrapada entonces se imprimira el mensaje de error en la consola y el
+ programa terminara informando el tipo de excepcion y el stack trace del error.
+ Para atrapar una excepcion debemos declarar un bloque try catch.
+
+ Supongamos que algun codigo dentro del bloque try lanza una excepcion de clase especificada dentro del
+ bloque catch o alguna de sus subclases, en ese caso:
+ 1. el programa omite el resto del codigo en el bloque try
+ 2. el programa ejecuta el codigo para controlar dicha excepcion que esta dentro del bloque catch
+
+ Si ningun codigo dentro del bloque try lanza una excepcion entonces el programa salta el bloque catch
+ Si alguna parte del codigo lanza una excepcion de otro tipo distinta al tipo especificado en el bloque
+ catch, entonces el metodo sale inmediatamente.
+
+En muchas ocasiones la mejor opcion al tratar con excepciones es no hacer nada y lanzar la excepcion
+al metodo que llamo a este metodo que lanzo la excepcion. Si tomamos la postura de no hacer nada
+ante una excepcion ya solo lanzar entonces debemos incluir la clausula throws dentro de nuestro metodo
+y advertir la excepcion que puede lanzar el metodo
+
+Si llamamos a un metodo que lanza una checked exception entonces tenemos dos opciones, volver a lanzar
+dicha excepcion o capturar la excepcion y procesarla dentro del bloque catch
+
+Cual es la mejor estrategia? bueno, la recomendada es, si usted sabe que hacer cuando se produce dicha
+excepcion entonces es mejor procesarla, pero si no sabes que hacer entonces debemos re-lanzarla y que
+el llamador del metodo se encargue. Si vamos a propagar una excepcion entonces debemos incluir en nuestro
+metodo la clausula throws junto con la excepcion que puede lanzar.
+
+En nuestro metodo podemos capturar multiples excepciones de tipos distintos dentro de un bloque try.
+necesitamos ordenar las clausulas catch desde la excepcion mas especifica hasta la mas general.
+
+Para saber la naturaleza de la excepcion con el metodo ex.getMessage()
+Para saber el tipo actual de la excepcion ex.getClass().getName()
+
+Re-Lanzando y Cadena de excepciones
+===================================
+Podemos lanzar una exception dentro del bloque catch, hacemos eso normalmente cuando queremos cambiar el
+tipo de excepcion. Sintaxis:
+
+try{
+ ...
+}
+catch(SQLException ex){
+    // establecemos la excepcion original como la causa de la nueva excepcion.
+    var e = new JavaCoreException("erorr: " + ex);
+    throw e;
+}
+
+JavaCoreException tiene un constructor al cual podemos pasarle un string y la causa de la excepcion. Si
+utiliza un tipo de exception para el que ese no es el caso podemos llamar:
+e.initCause(ex)
+Cuando la excepcion es atrapada, la excepcion original puede ser recuperada:
+Throwable original = caughtException.getCause()
+
+Algunas veces quermeos registrar una excepcion y relanzarla sin ningun cambio
+try{
+ ...
+}catch(Exception e){
+    logger.log(level, message, e);
+    throw e;
+}
+
+Aqui hay un detalle, supongamos que el codigo esta dentro de un metodo:
+
+public void updateRecord() throws SQLException
+el compilador rastrea el hecho de que e se origina dentro del bloque try. Siempre que las unicas
+checked exceptions en este bloque sean SQLException y siempre que e no se cambie en el bloque catch
+es valido declarar el metodo envuelto como throws SQLException.
+
+La clausula Final
+=================
+Cuando su aplicacion lanza una excepcion, se detiene el procesamiento del codigo restante en su metodo.
+Esto es un problema si el metodo ha utilizado algunos recursos, los cuales solo este metodo conoce y los
+recursos deben ser limpiados. Una solucion es atrapar todas las excepciones, realizar la limpieza y
+relanzar las excepciones pero esta solucion es tediosa. La clausula finally puede resolver este problema
+
+el codigo en el bloque finally se ejecuta ya sea que una excepcion sea atrapada o no por ello dentro del
+bloque finally se suele colocar codigo que verifique si hay recursos abiertos como conexion a bases de
+datos, objetos resultset y demas y si no son null entonces cerrarlos.
+Por ejemplo
+
+var in = new FileInputStream(. . .);
+try
+{
+// 1
+code that might throw exceptions
+// 2
+}
+catch (IOException e)
+{
+// 3
+show error message
+// 4
+}
+finally
+{
+// 5
+in.close();
+}
+//6
+
+El cuerpo de la clausula finally se utiliza para limpieza y liberacion de recursos. No se debe colocar
+sentencias que pueden cambiar el flujo del programa como return, throw, break, continue
+
+Try-with-Resources
+==================
+existe una abreviacion para el siguiente patron de codigo:
+abrimos el recurso
+tyr{
+    //trabajamos con un recurso
+}
+finally{
+    // cerramos el recurso
+}
+
+la forma try-with-Resources tiene el siguiente aspecto:
+try( Resource res = ...){
+    // trabajamos con el recurso
+}
+cuando el bloque try existe entonces res.close() es llamado automaticamente.
+cuando el bloque try termina con normalidad o cuando se produce una excepcion, res.close() es
+llamado automaticamente, es exactamente igual como se hubiese usado el bloque finally{}
+
+Un bloque try-with=Resources puede tener un bloque catch y un bloque finllay, estos bloques son
+ejecutados luego que los recursos son cerrados.
