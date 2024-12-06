@@ -8,3 +8,71 @@ E       tipo de elemento de una coleccion
 K y V   para tipps clave-valor de una tabla
 T, U, S para cualquier tipo general.
 
+No solo podemos crear clases generics sino tambien podemos declara generics methods. Esto metodos genericos
+incluso pueden ser creados dentro de clases que no son generics o clases ordinarias como dentro de
+clases generics. La sintaxis es:
+
+public static <T> T getMiddle(T...){}
+Las type variables en un metodo se definen luego del modificador de acceso, en nuestro ejemplo despues de
+public static, y antes del tipo de retorno del metodo.
+
+LLamando un metodo generic: para llamar un metodo generico podemos especificar el type variable usando
+los pico parentesis. Por ejemplo:
+String middle = ArrayAlg.<String>getMiddle("John", "Queen")
+
+El compilador puede deducir que el type variable es un string por lo que podemos llamar:
+String middle = ArrayAlg.getMiddle("John", "Queen");
+
+Restricciones al type variables
+===============================
+Por ejemplo
+public static <T> T min(T[] a){}
+en el metodo min el type variable es de tipo T lo cual significa que podria ser cualquier objeto
+de una clase arbitraria, pero, como hariamos si queremos asegurarnos que T tenga el metodo compareTo()?
+La solucion es restringer T a una clase que implemente la interface Comparable, entonces la firma del
+metodo seria:
+
+public static <T extends Comparable> T min(T[] a){}
+ahora, el metodo generico min() puede ser solo llamado por clases que implementen la interface Comparable
+
+cuando escribimos T extends Comparable expresamos que T deberia ser un subtipo de Comparable. se eligio
+la palabra clave extends porque es una aproximacion razonable del concepto de subtipo.
+Un type variable puede tener multiples limites por ejemplo:
+T extends Comparable & Serializable
+
+Podemos especificar varios interfaces como supertipos pero solo una clase puede ser un limite como maximo,
+si tenemos a una clase como limite, el primero en la lista debe ser la clase.
+
+Tipo Borrado
+============
+En la JVM no existen los genericos, el compilador de java borra los parametros de tipos. Por ejemplo:
+public class Pair<T> es reemplazado por el compilador como public class Pair
+y las variables tipo como:
+private T first;
+private T second;
+son reemplazado por:
+private Object first;
+private Object second;
+
+El programa puede contener diferentes tipos de Pair, por ejemplo Pair<String>, Pair<LocaleDate> pero
+el borrado o Erasure vuelve a Pair su raw type.
+
+Como podemos ver T es una variable de tipo sin limite entonces se reemplaza por Object. el resultado es
+una clase ordinaria que podriamos haber implementado antes de que existan los genericos en el lenguaje.
+
+Notas: Cuando trabajamos con generics, debemos recordar la siguiente:
+1. no hay genericos en la JVM, solo clases ordinarias y metodos
+2. todos los parameter types son reemplazados por sus types bounds
+3. los bridge methods son sintetizados para preservar el polimorfismo
+4. casts son insertados cuando son necesarios para preservar el type safety.
+
+Generic Record Pattern
+======================
+Si convertirmos la clase Pair<T> en record generic seria:
+record Pair<T>(T first, T second){}
+
+creamos un objeto: var p = new Pair<String>("hello", "world");
+y para hacer comprobaciones:
+p instanceof Pair<String>(var a, var b) o tambien
+p instanceof Pair<String>(String a, String b)
+
