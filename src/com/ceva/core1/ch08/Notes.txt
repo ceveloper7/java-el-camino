@@ -76,3 +76,31 @@ y para hacer comprobaciones:
 p instanceof Pair<String>(var a, var b) o tambien
 p instanceof Pair<String>(String a, String b)
 
+Reglas de la Herencia para los tipos Genericos
+==============================================
+Las clases genericas pueden extender o implementar otras clases genericas.
+Una ArrayList<Manager> puede ser convertido a List<Manager> pero un
+ArrayList<Manager> no es un ArrayList<Employee> o List<Employee>
+
+Los tipos Comodines
+===================
+En un tipo comodin, al parametro tipo se le permite variar, por ejemplo:
+Pair<? extends Employee>
+esto significa: cualquier tipo Pair cuyo parametro tipo es una subclase de Employee como puede ser
+Pair<Manager> pero no Pair<String> por lo tanto el tipo
+Pair<Manager> es un subtipo de Pair<? extends Employee>
+Pair<Employee> es un subtipo de Pair<? extends Employee>
+
+Super type para Comodin
+=======================
+? super Manager, este comodin restringe a todos los supertipos de Manager.
+Pair<Employee> es un super tipo de Pair<? super Manager>
+Pair<Object> es un super tipo de Pain<? super Manager>
+Pair<Manager> es un super tipo de Pair<? super Manager>
+
+Un comodin con super tipo le da un comportamiento que es opuesto al comodin con subtipo.
+Los comodines con limite supertype le permiten escribir un objeto generico
+Los comodines con limite subtype le permiten leer desde un objeto generico
+
+Wildcars sin limites (unbounded)
+====================

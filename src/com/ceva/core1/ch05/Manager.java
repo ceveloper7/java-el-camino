@@ -29,6 +29,10 @@ public class Manager extends Employee {
         this.bonus = bonus;
     }
 
+    public double getBonus(){
+        return bonus;
+    }
+
     /*
      * Sobrescribimos el metodo getSalary de la Superclass Employee
      *  El salario de la subclase Manager consiste en baseSalary + bonus
