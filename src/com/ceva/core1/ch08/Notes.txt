@@ -1,0 +1,10 @@
+Programacion con Genericos
+==========================
+Programacion generica significa escribir codigo que se puede reutilizar para objetos de muchos tipos diferentes.
+
+Definir una clase generica: Una clase generica es una clase con una o mas variables de tipo.
+Es comun utilizar letras mayusculas para las type variables:
+E       tipo de elemento de una coleccion
+K y V   para tipps clave-valor de una tabla
+T, U, S para cualquier tipo general.
+
