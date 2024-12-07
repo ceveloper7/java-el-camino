@@ -1,5 +1,19 @@
 Programacion con Genericos
 ==========================
+Un tipo generico es un tipo con un parameter type formal.
+Un tipo parametrizado es la instanciacion de un tipo generico con un argument type actual
+
+Un tipo generico es un reference type que tiene uno o mas type parameters. Estos type parameters
+son luego reemplazados por type arguments cuando el tipo generico es instanciado.
+Por ejemplo: interface Collection<E>
+La interface Collection tiene un type parameter E, este type parameter luego sera reemplazado
+por un type argument cuando el tipo generico es instanciado y usado.
+La instanciacion de un tipo generico con un parameter type actual es llamado tipo parametrizado.
+
+un ejemplo de tipo parametrizado: Collection<String> coll = new LinkedList<String>();
+Collection<String> coll se llama tipo parametrizado, el cual es una instanciacion del tipo
+generico Collection, donde el tipo E ha sido reemplazado por un tipo concreto String
+
 Programacion generica significa escribir codigo que se puede reutilizar para objetos de muchos tipos diferentes.
 
 Definir una clase generica: Una clase generica es una clase con una o mas variables de tipo.
@@ -103,4 +117,11 @@ Los comodines con limite supertype le permiten escribir un objeto generico
 Los comodines con limite subtype le permiten leer desde un objeto generico
 
 Wildcars sin limites (unbounded)
-====================
+================================
+Podemos usar wildcards sin ningun tipo de limites (unbounded) por ejemplo
+Pair<?>, Employee<?>
+el tipo Pair<?> tiene los metodos
+? getFirst()
+void setFirst(?)
+
+Un wildcard no es un type variable

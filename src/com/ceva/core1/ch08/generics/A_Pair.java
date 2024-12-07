@@ -1,8 +1,13 @@
 package com.ceva.core1.ch08.generics;
 
+import java.util.Date;
+
 /*
- * Definicion de una simple clase generica A_Pair<T>.
- * <T> -> type variable
+ * Definicion de una Tipo generico A_Pair<T>.
+ * Un tipo generico es un reference type que tiene uno o mas type parameters
+ * T first -> type variable o type parameter
+ * T second -> type variable o type parameter
+ * estos type parameters seran reemplazados por type arguments cuando el generic type Pair es instanciado.
  */
 public class A_Pair<T> {
     /*
@@ -20,4 +25,9 @@ public class A_Pair<T> {
 
     public void setFirst(T newValue) { first = newValue; }
     public void setSecond(T newValue) { second = newValue; }
+
+    public static void main(String[] args) {
+        // Instanciacion del tipo generico Pair<T>
+        A_Pair<String> pair = new A_Pair<>();
+    }
 }

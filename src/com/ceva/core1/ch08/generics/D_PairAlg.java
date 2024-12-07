@@ -5,6 +5,7 @@ public class D_PairAlg {
         return p.getFirst() == null || p.getSecond() == null;
     }
 
+    // parameter T captura el wildcard ? de swap()
     public static <T> void swapHelper(A_Pair<T> p)
     {
         T t = p.getFirst();
@@ -12,5 +13,9 @@ public class D_PairAlg {
         p.setSecond(t);
     }
 
+    /*
+     * uso de wildcar sin limite (?) pero como  ? no es type, llamamos al metodo
+     * swapHelper() el parametro T que captura el wildcard ?
+     */
     public static void swap(A_Pair<?> p) { swapHelper(p); }
 }

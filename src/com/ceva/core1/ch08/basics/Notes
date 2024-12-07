@@ -1,0 +1,3 @@
+ver: https://angelikalanger.com/GenericsFAQ/JavaGenericsFAQ.html#SECTION1
+Fundamentals
+    Why do instantiations of a generic type share the same runtime type?
