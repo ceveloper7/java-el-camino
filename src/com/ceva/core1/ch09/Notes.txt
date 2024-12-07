@@ -1,0 +1,112 @@
+COLLECTIONS FRAMEWORK
+=====================
+
+QUEUE INTERFACE
+===============
+La interface queue especifica que puede agregar elemento al final de la cola del queue, remover la cabeza y
+saber cuantos elementos hay en la queue.
+Podemos usar queue cuando necesitamos recolectar objetos y removerlos en una modalidad
+"el que primero entra primero sale"(first-in/first-out)
+
+Implementaciones de Queue
+=========================
+    Circular Array (ArrayDeque) : Queue<Customer> customersQ = new ArrayDeque<>(100);
+    Lista enlazada (LinkedList) : Queue<Customer> customerL = new LinkedLst<>(100);
+
+Que implementacion usar
+=======================
+Un ArrayDeque es mas eficiente en memoria. Sin embargo el ArrayDeque tiene una capacidad finita y debe
+reasignarse cada vez que se llena.
+
+La interface COLLECTION
+=======================
+    add(): Agrega un elemento a la coleccion. este metodo retorn true si al agregar realmente se produce
+           cambios en la coleccion. Por ejemplo, si agregamos un elemento en un Set pero dicho elemento
+           ya se encuentra en el Set entonces el metodo add de Set retorna false, porque Set
+           no permite elementos duplicados.
+
+    iterator(): Iterator es una interface, entre sus metodos estar next() que nos permite visitar los
+                elementos de una coleccion uno a uno, pero antes de llamar al metodo next() necesitamos
+                llamar a hasNext() para saber si hay un siguiente elemento o se llego al final de la coleccion.
+                hasNext() retorna true si no se llego al final de coleccion, false de lo conrario.
+
+Recorrer elementos
+==================
+Collection<String> col....;
+Iterator<String> iter = col.iterator();
+while(col.hasNext()){
+    String element = iter.next();
+    ...
+}
+
+Podemos usar for-each loop para abreviar el codigo de arriba, aunque internamente el compilador
+traduce un for-each loop en el codigo mostrado arriba.
+
+Evitando escribir un for
+========================
+en lugar de escribir un loop podemos llamar a Collection.forEach() o a Iterator.forEachRemaining()
+con un lambda expresion que consume un elemento. el lambda es invocado sobre todos los elementos de la
+coleccion o los elementos restantes que el iterator puede visitar.
+
+coll.forEach((element) ->{});
+iter.forEachRemaining((element) ->{});
+
+Remove un Element
+=================
+el metodo remove() de la interface Iterator remueve un elemento que fue retornado por la ultima llamada a next().
+si queremos remover un elemento en una posicion particular, necesitamos primero pasar el elemento. Por ejemplo
+Iterator<String> iter = coll.iterator();
+iter.next(); // pasamos el elemento.
+iter.remove()
+
+es ilegal intentar remover un elemento si antes no hicimos un .next()
+
+Interfaces del Framework Collection
+===================================
+    Collection: ya vimos como insertar un nuevo elemento en un collection con el metodo add().
+                podemos leer datos de una coleccion recorriendola con un iterator.
+    Map: mapea un par llave/valor o key/value y se utiliza el metodo put() para insertar un elemento.
+         Para leer un elemento en un map usamos el metodo .get()
+
+LIST
+====
+Una list es una coleccion ordenada. Los elementos se adicionan en una posicion particular dentro del
+container. Los elementos pueden ser accedidos de dos formar:
+    forma aleatoria: se llama asi porque los elementos pueden ser visitado en cualquier orden.
+    forma secuencial: se llama asi porque los elementos son visitados con in iterator de forma sequencial.
+
+Collection Concretas
+====================
+Array y ArrayList tiene un inconveniente: remover un elemento en la mitad del array es muy costoso. Todos
+los elementos que estan mas alla del elemento eliminado deben moverse al comienzo de la matriz y lo mismo
+se aplica al querer insertar un elemento en la mitad del arreglo.
+La estructura de datos ArrayList resuelve este problema. donde un array almacena referencias a objetos en
+ubicaciones de memoria consecutivas, una lista enlazada almacena cada objeto en un enlace separado.
+Cada enlace (link) almacena una referencia al siguiente enlace en la secuencia.
+
+Para borrar un elemento en el medio de una lista enlazada es una operacion sencilla. solo los
+links junto al elemento a ser borrado se deben eliminar.
+
+el metodo add del linkedlist agrega el elemento al final de la lista. si queremos agregar un elemento
+que dependa de la posicion es la responsabilidad de un iterator. Java collections provee una
+subinterface llamada ListIterator que contiene un metodo add() que no retorna un boolean.
+ListIterator ademas posee los metodos hasPrevious(), previous() recorrer la lista hacia adelante o
+atras.
+
+Si una linkedlist contiene 3 elementos: A,B,C hay 4 posibles posiciones:
+|ABC
+A|BC
+AB|C
+ABC|
+
+el metodo set reemplaza el ultimo elemento retornado por next() o previous().
+ejmplo de reemplazar el primer elemento de una lista:
+ListIterator<String> iter = list.listIterator();
+String oldValue = iter.next(); // returns first element
+iter.set(newValue); // sets first element to newValue
+
+Linkedlist proporciona el metodo get() para obtener un elemento particular aunque no es muy eficiente,
+es por esta razon que los programadores no suelen usar LinkedList en situaciones donde necesitan
+acceder a los elementos por medio de un indice entero. Si usamos una LinkedList y estamos llamando
+al metodo get() probablemente estamos usando la estrctura de datos eqivocada.
+
