@@ -110,3 +110,27 @@ es por esta razon que los programadores no suelen usar LinkedList en situaciones
 acceder a los elementos por medio de un indice entero. Si usamos una LinkedList y estamos llamando
 al metodo get() probablemente estamos usando la estrctura de datos eqivocada.
 
+Hash Sets
+=========
+LinkedList y Arrays nos permiten especificar el orden en el que deseamos organizar los elementos. Sin embargo,
+si queremos buscar un elemento en particular y no recordamos su posicion debemos recorrer todos los elementos
+hasta que encontremos una coincidencia, esto puede llevar mucho tiempo si la coleccion contiene muchos
+elementos. Si no nos importa el orden de los elementos, hay estructuras de datos que nos permiten
+encontrar elementos mucho mas rapido.
+Una estructura de datos bien conocida para encontrar elementos es la tabla hash.
+Una tabla hash calcula un numero entero llamado codigo hash para objeto.
+
+En java las tablas hash estan implementadas como arreglos de linkedlist. cada lista es llamada bucket
+Para encontrar el lugar de un objeto en la tabla, calculamos su codigo hash de la clave, luego se aplica
+la operacion modulo de el codigo hash y el numero de buckets que contiene la tabla, el resultado de
+la operacion es el lugar donde esta ubicado el elemento.
+
+Un hash collision se produce cuando en el lugar donde se quiere insertar el elemento pero el bucket
+no esta vacio.
+
+Una de las estructuras de datos mas simples que implementa hash table es Set. Un Set es una coleccion
+de elementos sin duplicados. Elmetodo Add de un Set primero intenta encontrar el objeto a ser
+agregado, y lo adiciona solo si, este no esta presente.
+
+Java provee la clase HashSet. Usariamos HashSet solo si no nos importa el orden de los elementos en la
+coleccion.
