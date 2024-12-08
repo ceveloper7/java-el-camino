@@ -134,3 +134,13 @@ agregado, y lo adiciona solo si, este no esta presente.
 
 Java provee la clase HashSet. Usariamos HashSet solo si no nos importa el orden de los elementos en la
 coleccion.
+
+TreeSet
+=======
+La clase TreeSet es similar a HashSet, con una mejora agregada. Un TreeSet es una coleccion ordenada.
+Usted inserta elementos en la coleccion en cualquier orden. Cuando se iteran en la coleccions, los valores
+son automaticamente presentados en orden. Cada vez que se inserta un elemento al tree, este es colocado en
+su posicion ordenada.
+
+Adicionar un elemento al un TreeSet es mas lento que hacerlo en un Hash table pero es mucho mas rapido
+que verificar duplicados en un array o linkedlist.

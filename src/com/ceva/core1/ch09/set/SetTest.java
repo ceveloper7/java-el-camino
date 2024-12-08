@@ -19,7 +19,7 @@ public class SetTest {
         }
 
         Iterator<String> iter = wordSet.iterator();
-        for (int i = 1; i <= 200 && iter.hasNext(); i++)
+        for (int i = 1; i <= 20 && iter.hasNext(); i++)
             System.out.print(iter.next() + " ");
         System.out.println("...");
         System.out.printf("%s: %d words, %d distinct, %.3f seconds.%n",
@@ -44,7 +44,7 @@ public class SetTest {
                }
             }
         }
-        time(new HashSet<>(), words, 1);
-        time(new TreeSet<>(), words, 1);
+        time(new HashSet<>(), words, 100);
+        time(new TreeSet<>(), words, 100);
     }
 }
