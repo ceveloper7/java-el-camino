@@ -1,0 +1,60 @@
+MAPS
+====
+Un Set es una coleccion que le permite encontrar un elemento existente rapidamente. usualmente tenemos
+una informacion clave y queremos buscarla en un elemento asociado. La estructura map sirve para dichi proposito.
+
+Un map almacena una estructura key/value, usted puede encontrar un valor si porporciona un key. Por ejemplo:
+usted puede tener una tabla con registros de empleados donde la key son employeeId y los valores son
+objetos Employee
+
+Existen donde implementaciones generales de maps que implementan la interface Map
+
+HASHMAP
+=======
+Utiliza una llave hash. La llave debe ser unica, no podemos almacenar dos valores con la misma llave.
+Si usamos .get() y pasamos una llave que no se encuentra en el hash map entonces retorna null,
+para evitar recibir un null podemos usar .getOrDefault(id, 0) si id no se encuentra retorna 0, que es
+mejor a recibir un null.
+Si llamamos a .put() donde veces con la misma llave, la segunda llamada reemplaza los valors que agrego
+la primera llamada.
+
+La manera mas facil de iterar sobre llaves y valores es usando el metodo forEach() al metodo se le pasa
+una funcion lambda que recibe la key/value
+
+TREEMAP
+=======
+Utiliza un ordenamiento de llave para organizarlas en un arbol de busqueda. el hash o funcion de comparacion
+es solo aplicado a las llaves.
+
+HashMap es un poco mas rapido y es la eleccion preferida si no necesitamos visitar las llaves en un orden.
+
+Map Views
+=========
+Podemos obtener views de un objeto map que implementa la interface Collection o una de sus subinterfaces.
+Hay tres vistas que nos ofrecen los maps:
+
+Set of keys : Set<K> keySet()
+Collection of values : Collection<V> values()
+Set of key/value pairs : Set<Map.Entry<K, V>> entrySet(). Los elementos del Entry set son objetos
+de una clase que implementa la interface Map.Entry
+
+Weak HashMap
+============
+Java collection framework tiene varias clases map especializadas para diversas necesidades:
+
+WeakHashMap: fue disenada para resolver un problema interesante: que sucede con un valor cuya clave
+ya no se usa en ningun lugar del programa? Si la referencia a una clave ha desaparecido porque
+no esta en ningun lado del programa el par clave/valor no se puede eliminar del map. El recolector
+de basura tampoco lo va a eliminar ya que este recolector no elimina datos de un map que esta vivo.
+Por lo tanto, nuestros programas deben tener cuidado de eliminar los datos no utilizados de los maps.
+
+El WeakHashMap es una estructura que coopera con el GC para remover pares key/value cuando la unica
+referencia a la key proviene de la entrada de la hash table.
+
+Linked HashSet & Maps
+=====================
+Las clases LinkedHashSet y LinkedHashMap recuerdan en que orden fueron insertados los items. de esa manera
+podemos evitar el ordenamiento aparentemente aleatorio de los items en una tabla hash.
+
+
+
