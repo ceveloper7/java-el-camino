@@ -144,3 +144,10 @@ su posicion ordenada.
 
 Adicionar un elemento al un TreeSet es mas lento que hacerlo en un Hash table pero es mucho mas rapido
 que verificar duplicados en un array o linkedlist.
+
+Queues y Deques
+===============
+Una queue le permite eficientemente agregar un elemento despues del ultimo y remover el primer elemento.
+Una queue de doble extremo p deque le permite eficientemente adicionar o remover elementos en ambos
+extremos. adicionar elementos en el medio no es soportado.
+La interface Deque es implementada por las clases ArrayDeque y LinkedList
