@@ -39,7 +39,7 @@ public class A_String {
         System.out.println();
         String html2 = """
                 <div class="warning">
-                    Beware of those who say 'Hello' to the world
+                    Beware of those who say "Hello" to the world
                 </div>
                 """;
         System.out.println(html2);
