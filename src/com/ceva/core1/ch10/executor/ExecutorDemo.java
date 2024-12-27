@@ -11,6 +11,9 @@ import java.util.concurrent.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Como usar Callables & Executors
+ */
 public class ExecutorDemo {
 
     //  Counts occurrences of a given word in a file.
@@ -18,7 +21,7 @@ public class ExecutorDemo {
         try(var in = new Scanner(path)){
             int count = 0;
             while (in.hasNext())
-                if (in.next().contains(word)) count++;
+                if (in.next().equals(word)) count++;
             return count;
         }catch (IOException ex){
             return 0;
@@ -40,7 +43,7 @@ public class ExecutorDemo {
             {
                 while (in.hasNext())
                 {
-                    if (in.next().contains(word)) return path;
+                    if (in.next().equals(word)) return path;
                     // verificamos si el status del hilo es interrupted
                     if (Thread.currentThread().isInterrupted())
                     {
@@ -60,15 +63,16 @@ public class ExecutorDemo {
             System.out.print("Enter keyword (e.g. volatile): ");
             String word = in.nextLine();
 
+            // Lista de archivos en un directorio
             Set<Path> files = descendants(Path.of(start));
             var tasks = new ArrayList<Callable<Long>>();
-
             for(Path file : files){
+                // nro de ocurrencia de una palabra en un archivo, seperamos cada file en una task
                 Callable<Long> task = ()-> occurrences(word, file);
                 tasks.add(task);
             }
 
-            // Preparamos el Executor para las tareas
+            // Pasamos todas las tasks al Executor
             ExecutorService executor = Executors.newCachedThreadPool();
             // use a single thread executor instead to see if multiple threads
             // speed up the search
@@ -81,22 +85,23 @@ public class ExecutorDemo {
             List<Future<Long>> results = executor.invokeAll(tasks);
             Instant endTime = Instant.now();
             long total = 0;
-
             // procesamos los objeto Future
             for(Future<Long> result : results){
+                // adicionamos todos los results, bloqueando hasta que ellos esten disponibles
                 total += result.get();
             }
-
             // print
             System.out.println("Occurrences of " + word + ": " + total);
             System.out.println("Time elapsed: " + Duration.between(startTime, endTime).toMillis() + " ms");
 
+            // BUSCAMOS EL PRIMER ARCHIVO QUE CONTIENE UNA PALABRA DADA
             var searchTasks = new ArrayList<Callable<Path>>();
             for(Path file : files){
                 searchTasks.add(searchForTask(word, file));
             }
 
             startTime = Instant.now();
+            // invokeAny permite paralelizar la busqueda. invokeAny termina tan pronto alguna task retorna
             Path found = executor.invokeAny(searchTasks);
             endTime = Instant.now();
             System.out.println(word + " occurs in: " + found);
