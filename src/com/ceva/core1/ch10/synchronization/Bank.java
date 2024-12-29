@@ -50,13 +50,22 @@ public class Bank {
         // seccion critica
         try
         {
-            while (accounts[from] < amount)
+            while (accounts[from] < amount){
+                // si la cuenta de origen no tiene suficiente saldo, el hilo que ejecuta este metodo
+                // entra en estado de espera, utilizando wait. esto libera el bloqueo que permite
+                // a otros hilos ejecutar este metodo y eventualmente agregar mas fondos en la cuenta
                 sufficientFunds.await();
+            }
             System.out.print(Thread.currentThread());
             accounts[from] -= amount;
             System.out.printf(" %10.2f from %d to %d", amount, from, to);
             accounts[to] += amount;
             System.out.printf(" Total Balance: %10.2f%n", getTotalBalance());
+
+            // termina la transferencia de fondos, y los saldos de cuentas han cambiado
+            // por lo que es buena practica llamar a signalAll, para que los hilos en espera
+            // puedan inspeccionar el saldo de la cuenta y decidir continuar con la operaciones
+            // de tranferencia.
             sufficientFunds.signalAll();
         }
         finally
@@ -68,6 +77,7 @@ public class Bank {
 
     /**
      * Gets the sum of all account balances.
+     * el metodo esta sincronizado para garantizar la consistencia de los datos
      * @return the total balance
      */
     public double getTotalBalance()
