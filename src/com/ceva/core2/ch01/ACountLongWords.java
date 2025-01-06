@@ -2,11 +2,10 @@ package com.ceva.core2.ch01;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.*;
 import java.util.List;
 
-public class CountLongWords {
-    private static final Class<?> cl = CountLongWords.class;
+public class ACountLongWords {
+    private static final Class<?> cl = ACountLongWords.class;
 
     public static void main(String[] args) throws IOException {
         InputStream stream = cl.getResourceAsStream("data/alice.txt");
