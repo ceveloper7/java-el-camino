@@ -21,11 +21,19 @@ public class CountLongWords {
                 count++;
             }
         }
+        System.out.println("(Collections) Number of words greater than 13 characters is " + count);
 
         // Procesamiento de la lista de manera declarativa
         count = words.stream()
                 .filter(word -> word.length() > 13)
                 .count();
-        System.out.println("Number of words greater than 13 characters is " + count);
+        System.out.println("(Streams) Number of words greater than 13 characters is " + count);
+
+        // Procesamiento parallelo
+        count = words.parallelStream()
+                .filter(word -> word.length() > 13)
+                .count();
+        System.out.println("(ParallelStream) Number of words greater than 13 characters is " + count);
+
     }
 }
