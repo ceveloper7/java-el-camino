@@ -14,6 +14,8 @@ package com.ceva.core1.ch03.datatype;
  * \newline in text block only. une esta linea con ka siguiente --
  */
 
+import java.util.stream.IntStream;
+
 public class B_Char {
 
 
@@ -24,5 +26,10 @@ public class B_Char {
         char b = '\u0000';
         char c = '\uFFFF';
 
+        System.out.println("min char value: " + b);
+        System.out.println("max char value: " + c);
+
+        IntStream.range(0, 65536)
+                .forEach(i -> System.out.println("c[" + i + "]=" + (char) i));
     }
 }

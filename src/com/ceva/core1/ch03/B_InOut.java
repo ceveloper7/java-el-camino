@@ -12,7 +12,8 @@ public class B_InOut {
     private static final String PATH = "c:\\java-development\\jobs.txt";
 
     public static void main(String[] args) throws Exception {
-        fileInOut();
+        readInput();
+        //fileInOut();
     }
 
     private static void fileInOut()throws IOException {
@@ -50,7 +51,7 @@ public class B_InOut {
      * # -> siempre incluye punto decimal, asi el valor no lo tenga
      */
     private static void formatingOutput(String name, int age, double size, double salary){
-        System.out.printf(Locale.US ,"Hello, %s. Next year, you will be %d, %nsize %.2f, salary %,#5.2f", name, (age+1), size, salary);
+        System.out.printf(Locale.US ,"Hello, %s. Next year, you will be %d, %nsize %,.2f, salary %,#5.2f", name, (age+1), size, salary);
 
         // String formatted se puede almacenar
         String outFmt = String.format("Hello, %s. Next year, you will be %d, %nsize %.2f, salary %,#5.2f", name, (age+1), size, salary);
