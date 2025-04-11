@@ -29,7 +29,14 @@ public class B_Char {
         System.out.println("min char value: " + b);
         System.out.println("max char value: " + c);
 
-        IntStream.range(0, 65536)
-                .forEach(i -> System.out.println("c[" + i + "]=" + (char) i));
+        // Stream de chars
+//        IntStream charStream = "Hello World".chars();
+//        charStream.forEach(System.out::println);
+
+//        IntStream.range(0, 65536)
+//                .forEach(i -> System.out.println("c[" + i + "]=" + (char) i));
+        int v = 65371;
+        char t = (char) v;
+        System.out.println(Character.toChars(65371));
     }
 }
