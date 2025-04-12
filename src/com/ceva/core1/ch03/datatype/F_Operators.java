@@ -2,8 +2,7 @@ package com.ceva.core1.ch03.datatype;
 
 public class F_Operators {
     public static void main(String[] args) {
-        increment_decrement();
-        switchExp();
+        System.out.println((false && true));
     }
 
 

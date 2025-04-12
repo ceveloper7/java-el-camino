@@ -19,12 +19,13 @@ public class F_Switch {
      */
     private void switchExpression(){
         // No Fallthrough: cada case termina con la flecha (->)
-        D_Enums.Size size = D_Enums.Size.SMALL;
+        D_Enums.Size size = D_Enums.Size.EXTRA_LARGE;
         int sizeValue = switch (size){
             case SMALL -> 1;
             case MEDIUM -> 2;
             case LARGE -> 3;
             case EXTRA_LARGE -> 4;
+            // es permitido omitir default debido a que hay un case para cada constante del enum Size
             default -> -1;
         };
         System.out.println(sizeValue);
@@ -33,6 +34,7 @@ public class F_Switch {
         String seasonName = "Primavera";
         int seasonValue = switch(seasonName){
             case "Verano":
+                // yield permite retornar un valor a la variable seasonValue
                 yield 1;
             case "Otonio":
                 yield 2;
@@ -44,6 +46,16 @@ public class F_Switch {
                 yield -1;
         };
         System.out.println(seasonValue);
+
+        char grade = 'F';
+        String message = switch (grade){
+            case 'A', 'B' -> "VERY GOOD";
+            case 'C', 'D' -> "GOOD";
+            case 'E' -> "BAD";
+            case 'F' -> "YOU GOT A PROBLEM BOY";
+            default -> "UNKNOW";
+        };
+        System.out.println("Your grade " + grade + " is " + message);
     }
 
     private void switchStatement(){

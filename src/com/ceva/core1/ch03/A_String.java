@@ -1,8 +1,22 @@
 package com.ceva.core1.ch03;
 
+import java.util.List;
+import java.util.regex.Pattern;
+
 public class A_String {
     public static void main(String[] args) {
-        textBlocks();
+        getLinesFromString();
+    }
+
+    private static void getLinesFromString(){
+        // Scenario 4: Parsing simple configuration data from a string
+        String configData = "server=localhost\nport=8080\ntimeout=30";
+
+        System.out.println("Configuration Parameters:");
+        configData.lines()
+                .map(line -> line.split("="))
+                .filter(parts -> parts.length == 2)
+                .forEach(parts -> System.out.println(parts[0].trim() + ": " + parts[1].trim()));
     }
 
     private static void textBlocks(){
@@ -177,6 +191,33 @@ public class A_String {
         String[] r5 = msg5.split("\\b{g}");
         System.out.println(r5[0]);
         System.out.println(r5[1]);
+    }
+
+    private static void splitStringAsStream(){
+        String logLine = "2023-10-27T10:30:00 INFO User 'john.doe' logged in from 192.168.1.100";
+        Pattern spacePattern = Pattern.compile("\\s");
+        List<String> items = spacePattern.splitAsStream(logLine)
+                .map(String::trim)
+                .toList();
+        items.forEach(System.out::println);
+    }
+
+    private static void splitWithDelimiters(){
+        String text = "apple,banana;orange,grape#tangerine";
+        String regex = "[,;#]";
+        int limit = 0; // Split as many times as possible
+
+        // Using splitWithDelimiters (available in Java 21 and later)
+        String[] result = text.splitWithDelimiters(regex, limit);
+
+        System.out.println("Original string: " + text);
+        System.out.println("Delimiter regex: " + regex);
+        System.out.println("Limit: " + limit);
+        System.out.println("Resulting array:");
+        for (String s : result) {
+            System.out.print("[" + s + "] ");
+        }
+        System.out.println();
     }
 
     private static void joinStr(){
